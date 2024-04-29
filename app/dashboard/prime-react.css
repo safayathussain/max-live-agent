@@ -1,0 +1,21 @@
+.p-fileupload-choose {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    position: absolute;
+    right: -5px;
+    top: 71%;
+    background-color: blue;
+    background: transparent;
+}
+
+
+.p-focus {
+    border: 0px !important;
+    outline: none !important;
+}
+.p-button:focus{
+    border: 0px !important;
+    outline: none !important;
+    box-shadow: none;
+}
