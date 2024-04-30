@@ -1,14 +1,16 @@
+'use client'
 import Image from 'next/image'
 import { FileUpload } from 'primereact/fileupload'
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '@/public/logo.svg'
+import '@/app/dashboard/prime-react.css'
 
 const SettingCard = () => {
-    const genarateUploadField = () => {
-        setTimeout(() => {
-            return <FileUpload mode='basic' name="demo[]" url={'/api/upload'} accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} />
-        }, 2000)
-    }
+    const [showUploadField, setShowUploadField] = useState(false)
+    setTimeout(() => {
+        setShowUploadField(true)
+        return
+    }, 2000)
     return (
         <div>
             <div className='bg-white flex px-8 py-8 rounded-xl gap-5 flex-col w-max min-w-[350px] '>
@@ -23,7 +25,7 @@ const SettingCard = () => {
 
                     <div className="card">
                         {
-                          genarateUploadField()
+                            showUploadField && <FileUpload mode='basic' name="demo[]" url={'/api/upload'} accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} />
                         }
                     </div>
                 </div>

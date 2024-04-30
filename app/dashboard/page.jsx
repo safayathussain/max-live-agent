@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { FileUpload } from 'primereact/fileupload';
-import './prime-react.css'
+
 import SettingCard from '@/components/SettingCard';
 const page = () => {
   

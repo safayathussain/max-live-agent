@@ -1,8 +1,9 @@
 .p-fileupload-choose {
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     border-radius: 100%;
     position: absolute;
+    padding: 15px 20px;
     right: -5px;
     top: 71%;
     background-color: blue;
