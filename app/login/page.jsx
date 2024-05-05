@@ -11,7 +11,7 @@ const page = () => {
         </div>
         <div className="flex flex-col max-w-[350px] w-full mt-8 gap-4">
           {/* userid */}
-          <div class="relative w-full">
+          <div className="relative w-full">
             <input
               type="email"
               id="useridField"
@@ -26,7 +26,7 @@ const page = () => {
             </label>
           </div>
           {/* amount */}
-          <div class="relative w-full">
+          <div className="relative w-full">
             <input
               type="password"
               id="amountField"

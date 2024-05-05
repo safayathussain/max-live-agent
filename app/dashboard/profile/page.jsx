@@ -19,7 +19,7 @@ const page = () => {
         <div className='flex justify-center px-8 py-4 text-center'>
           <div className='flex flex-col items-center gap-3'>
             <p className='text-xl text-grayColor'>Your Profile</p>
-            <div className='relative w-max f'>
+            <div className='relative w-max '>
                     <Image src={logo} alt='' className='rounded-full'></Image>
                     <button className='bg-error rounded-full flex justify-center items-center size-7 absolute right-2 top-[70%]'>
                         <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,10 +34,9 @@ const page = () => {
                         }
                     </div>
                 </div>
-            {/* <Image src={logo} className='size-20 rounded-full mx-auto mt-4'></Image> */}
             <div>
               <div className="flex flex-col  sm:min-w-[350px] w-full mt-4 gap-4">
-                <div class="relative w-full">
+                <div className="relative w-full">
                   <input
                     type="email"
                     id="useridField"
@@ -51,7 +50,7 @@ const page = () => {
                     Your Email
                   </label>
                 </div>
-                <div class="relative w-full">
+                <div className="relative w-full">
                   <input
                     type="email"
                     id="useridField"
@@ -65,7 +64,7 @@ const page = () => {
                     Your Email
                   </label>
                 </div>
-                <div class="relative w-full">
+                <div className="relative w-full">
                   <input
                     type="email"
                     id="useridField"
@@ -79,7 +78,7 @@ const page = () => {
                     Your Email
                   </label>
                 </div>
-                <div class="relative w-full">
+                <div className="relative w-full">
                   <input
                     type="email"
                     id="useridField"
