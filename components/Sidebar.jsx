@@ -143,39 +143,46 @@ const Sidebar = ({ open, setOpen }) => {
             <Image src={logo}></Image>
           </a>
         </div>
-        <nav className="hs-accordion-group py-6 w-full mt-5 flex flex-col flex-wrap">
-          <ul className="space-y-0.5">
-            {items.map((item, i) => (
-              <li key={i}>
-                <Link
-                  onClick={() => setOpen(false)}
-                  key={i}
-                  className={
-                    pathname === item.link
-                      ? "flex items-center  py-2 px-5 gap-x-2 duration-100 text-white bg-primary"
-                      : "flex items-center  py-2 px-5 gap-x-2 duration-100 text-grayColor hover:bg-gray-100"
-                  }
-                  href={item.link}
-                >
-                  <span
+        <div className="relative">
+          <nav className="hs-accordion-group py-6 w-full mt-5 flex flex-col flex-wrap">
+            <ul className="space-y-0.5">
+              {items.map((item, i) => (
+                <li key={i}>
+                  <Link
+                    onClick={() => setOpen(false)}
+                    key={i}
                     className={
-                      pathname === item.link ? "active-icon " : "pending-icon "
+                      pathname === item.link
+                        ? "flex items-center  py-2 px-5 gap-x-2 duration-100 text-white bg-primary"
+                        : "flex items-center  py-2 px-5 gap-x-2 duration-100 text-grayColor hover:bg-gray-100"
                     }
+                    href={item.link}
                   >
-                    {item.icon}
-                  </span>
-                  {item.title}
-                  {
-                    item.title.includes('Requests') &&
-                    <span className="size-4 rounded-full flex items-center justify-center bg-[#FC4949] text-white text-xxs">
-                      1
+                    <span
+                      className={
+                        pathname === item.link ? "active-icon " : "pending-icon "
+                      }
+                    >
+                      {item.icon}
                     </span>
-                  }
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+                    {item.title}
+                    {
+                      item.title.includes('Requests') &&
+                      <span className="size-4 rounded-full flex items-center justify-center bg-[#FC4949] text-white text-xxs">
+                        1
+                      </span>
+                    }
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div className="w-full flex justify-center ">
+            <button className='rounded-full block lg:hidden bg-white border border-error text-error w-full mx-5 py-2 text-sm whitespace-nowrap  font-medium'>
+              Log Out
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
