@@ -8,7 +8,7 @@ const Modal = ({ open, setOpen, children }) => {
             {
                 open &&
                 <>
-                    <div className='absolute top-0 left-0 w-full min-h-[calc(100vh-104px)] bg-primary opacity-30 blur-2xl'>
+                    <div className='absolute top-0 left-0 w-full min-h-[calc(100vh-104px)]  bg-primary opacity-30 blur-2xl'>
                     </div>
                     <div className=" fixed h-screen top-0 left-0 flex z-20 w-full items-center justify-center">
                         {children}

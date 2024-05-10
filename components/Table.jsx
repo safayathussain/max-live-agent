@@ -1,7 +1,16 @@
 'use client'
 import React from 'react'
 import { BsThreeDots } from "react-icons/bs";
-const Table = ({ sl = true, checkbox = true, headers = [], body = [], selectAllFunc = () => { }, selectOneFunc = () => { }, actionFunc = (() => { }) }) => {
+const Table = ({
+    sl = true,
+    checkbox = true,
+    headers = [],
+    body = [],
+    selectAllFunc = () => { },
+    selectOneFunc = () => { },
+    actionFunc = (() => { }),
+    detailModalFunc = (() => { })
+}) => {
     return (
         <div>
             <div className="relative  w-full px-5 max-w-[calc(100vw-50px)] max-h-[calc(100vh-300px)] overflow-x-scroll">
@@ -76,7 +85,7 @@ const Table = ({ sl = true, checkbox = true, headers = [], body = [], selectAllF
                                     }
                                 </th>
                             }
-                            <td className="px-6 py-4 font-medium text-[#1B2126]">
+                            <td className="px-6 py-4 font-medium text-[#1B2126] cursor-pointer" onClick={detailModalFunc}>
                                 Safayat hussain
                             </td>
                             <td className="px-6 py-4">
@@ -91,7 +100,7 @@ const Table = ({ sl = true, checkbox = true, headers = [], body = [], selectAllF
                             <td className="px-6 py-4 flex justify-center">
                                 <div onClick={actionFunc}>
 
-                                <BsThreeDots size={20} />
+                                    <BsThreeDots size={20} />
                                 </div>
                             </td>
                         </tr>
