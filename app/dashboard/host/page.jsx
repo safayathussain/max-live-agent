@@ -1,8 +1,12 @@
-'use client'
+"use client";
 import Table from "@/components/Table";
+import { FaBell } from "react-icons/fa";
 import Modal from "@/components/Modal";
 import { useRef, useState } from "react";
 import useClickOutside from "@/hooks/useClickOutside";
+import Image from "next/image";
+import logo from "@/public/logo.svg";
+import Link from "next/link";
 
 const page = () => {
     const [open, setopen] = useState(false)
@@ -18,7 +22,15 @@ const page = () => {
 
 
             <div className="bg-white rounded-lg w-full pt-8  mt-6 ">
-                <p className="text-xl px-10 pb-7 font-bold text-[#5C2D95]">Host list</p>
+               <div className="flex items-center justify-between">
+               <p className="text-xl px-10 pb-7 font-bold text-[#5C2D95]">Host list</p>
+                <button
+            onClick={openModal}
+            className="border border-[#5C2D95] text-[#5C2D95] rounded-full px-2 mr-4 sm:mr-10 whitespace-nowrap mb-4 flex items-center gap-2"
+          >
+            <FaBell /> Request
+          </button>
+               </div>
                 <Table actionFunc={openModal} />
                 <Modal open={open} setOpen={setopen} >
                     <form ref={ref} className=''>
