@@ -178,7 +178,7 @@ const Sidebar = ({ open, setOpen }) => {
             </ul>
           </nav>
           <div className="w-full flex justify-center ">
-            <button className='rounded-full block lg:hidden bg-white border border-error text-error w-full mx-5 py-2 text-sm whitespace-nowrap  font-medium'>
+            <button className='rounded-md block lg:hidden bg-white border border-error text-error w-full mx-5 py-2 text-sm whitespace-nowrap  font-medium'>
               Log Out
             </button>
           </div>

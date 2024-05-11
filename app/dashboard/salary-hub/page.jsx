@@ -1,4 +1,5 @@
 import Table from '@/components/Table'
+import SalaryTable from '@/components/tables/SalaryTable.jsx'
 import React from 'react'
 
 const page = () => {
@@ -16,7 +17,7 @@ const page = () => {
                 <div className='mt-5'>
                     <p className='pl-10'>Agancy Member Salary:</p>
                     <div className='mt-5'>
-                       <Table></Table>
+                       <SalaryTable></SalaryTable>
                     </div>
                 </div>
             </div>

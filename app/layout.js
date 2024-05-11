@@ -2,6 +2,7 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import Providers from "@/components/Providers";
 const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
@@ -16,12 +17,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <PrimeReactProvider>
-        
       <body className={`${poppins.variable} bg-[#EEF0F6] overflow-x-hidden`}>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
-      </PrimeReactProvider>
     </html>
   );
 }

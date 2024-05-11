@@ -7,6 +7,7 @@ import useClickOutside from "@/hooks/useClickOutside";
 import Image from "next/image";
 import logo from "@/public/logo.svg";
 import Link from "next/link";
+import ExchangeReqTable from "@/components/tables/ExchangeReqTable";
 
 const page = () => {
   const [open, setopen] = useState(false);
@@ -28,7 +29,7 @@ const page = () => {
           </p>
           
         </div>
-        <Table />
+        <ExchangeReqTable />
         
       </div>
     </div>

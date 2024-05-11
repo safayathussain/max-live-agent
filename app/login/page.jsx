@@ -1,9 +1,21 @@
+'use client'
 import Image from "next/image";
 import Link from "next/link";
 import logo from '@/public/logo.svg'
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "@/redux/slices/AuthSlice";
+import { useEffect } from "react";
 
 
 const page = () => {
+ const auth = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    
+    dispatch(setAuth({name: 'safayat'}))
+    console.log(auth)
+  }, [])
+  
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="bg-white mt-6 py-8 px-5 rounded-xl flex flex-col items-center w-96">
