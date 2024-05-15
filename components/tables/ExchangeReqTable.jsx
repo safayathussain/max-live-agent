@@ -298,65 +298,68 @@ export default function HostTable() {
                 </div>
                 {/* Pagination */}
                 <div className="flex justify-start md:justify-end items-center">
-                    <nav aria-label="Pagination">
-                        <ul className="inline-flex border rounded-sm shadow-md">
-                            <li>
-                                <button
-                                    className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
-                                    onClick={() => paginate(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    &#x2190;
-                                </button>
-                            </li>
-                            <li>
-                                {
-                                    currentPage !== 1 &&
-                                    <button
-                                        onClick={() => paginate(currentPage - 1)}
-                                        disabled={currentPage === 1}
-                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
-                                    >
-                                        {currentPage - 1}
-                                    </button>
-                                }
-                                <button
-                                    className={`py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none`}
-                                >
-                                    {currentPage}
-                                </button>
-                                <button
-                                    disabled={
-                                        currentPage === Math.ceil(data.length / dataPerPage)
-                                    }
-                                    onClick={() => paginate(currentPage + 1)}
-                                    className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
-                                >
-                                    {currentPage + 1}
-                                </button>
-                                <span
-                                    className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none cursor-not-allowed`}
-                                >
-                                    ...
-                                </span>
-                                <button
-                                    className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
-                                >
-                                    {Math.ceil(data.length / dataPerPage)}
-                                </button>
-                                <button
-                                    className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
-                                    onClick={() => paginate(currentPage + 1)}
-                                    disabled={
-                                        currentPage === Math.ceil(data.length / dataPerPage)
-                                    }
-                                >
-                                    &#x2192;
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+              <nav aria-label="Pagination">
+                <ul className="inline-flex border rounded-sm shadow-md">
+                  <li>
+                    <button
+                      className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
+                      onClick={() => paginate(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      &#x2190;
+                    </button>
+                  </li>
+                  <li>
+                    {
+                      currentPage !== 1 &&
+                      <button
+                        onClick={() => paginate(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
+                      >
+                        {currentPage - 1}
+                      </button>
+                    }
+                    <button
+                      className={`py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none`}
+                    >
+                      {currentPage}
+                    </button>
+                    {
+                      currentPage !== Math.ceil(data.length / dataPerPage) &&
+                      <button
+                        disabled={
+                          currentPage === Math.ceil(data.length / dataPerPage)
+                        }
+                        onClick={() => paginate(currentPage + 1)}
+                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
+                      >
+                        {currentPage + 1}
+                      </button>
+                    }
+                    <span
+                      className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none cursor-not-allowed`}
+                    >
+                      ...
+                    </span>
+                    <button
+                      className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
+                    >
+                      {Math.ceil(data.length / dataPerPage)}
+                    </button>
+                    <button
+                      className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
+                      onClick={() => paginate(currentPage + 1)}
+                      disabled={
+                        currentPage === Math.ceil(data.length / dataPerPage)
+                      }
+                    >
+                      &#x2192;
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
             </div>
             <Modal open={open} >
                 <form ref={ref} className=''>

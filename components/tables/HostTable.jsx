@@ -315,7 +315,7 @@ export default function HostTable() {
                                     <button
                                         onClick={() => paginate(currentPage - 1)}
                                         disabled={currentPage === 1}
-                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
+                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
                                     >
                                         {currentPage - 1}
                                     </button>
@@ -325,15 +325,18 @@ export default function HostTable() {
                                 >
                                     {currentPage}
                                 </button>
-                                <button
-                                    disabled={
-                                        currentPage === Math.ceil(data.length / dataPerPage)
-                                    }
-                                    onClick={() => paginate(currentPage + 1)}
-                                    className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
-                                >
-                                    {currentPage + 1}
-                                </button>
+                                {
+                                    currentPage !== Math.ceil(data.length / dataPerPage) &&
+                                    <button
+                                        disabled={
+                                            currentPage === Math.ceil(data.length / dataPerPage)
+                                        }
+                                        onClick={() => paginate(currentPage + 1)}
+                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
+                                    >
+                                        {currentPage + 1}
+                                    </button>
+                                }
                                 <span
                                     className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none cursor-not-allowed`}
                                 >
