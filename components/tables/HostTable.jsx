@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import useClickOutside from "@/hooks/useClickOutside";
 import Modal from "@/components/Modal";
+import ConfirmModal from "../ConfirmModal";
 
 export default function HostTable() {
     const dummyProducts = [
@@ -56,7 +57,11 @@ export default function HostTable() {
         },
 
     ];
-
+    // confirm modal
+    const [confModalOpen, setconfModalOpen] = useState(false)
+    const [confModalTitle, setConfModalTitle] = useState('')
+    const [confNextFunc, setConfNextFunc] = useState(() => { })
+    // 
     const [products, setProducts] = useState(dummyProducts);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortBy, setSortBy] = useState(null);
@@ -70,7 +75,9 @@ export default function HostTable() {
     const ref = useRef(null);
     useClickOutside(ref, () => {
         setOpen(false);
-        setActionModalOpen(false)
+        if (!confModalOpen) {
+            setActionModalOpen(false)
+        }
     });
 
     // Function to handle search input
@@ -122,6 +129,10 @@ export default function HostTable() {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    //  handle functions
+    const handleSend = () => {
+        console.log('hi')
+    }
     return (
         <div className=" overflow-hidden mx-8">
             <div className="flex flex-col md:flex-row items-center justify-between  pb-4">
@@ -275,7 +286,7 @@ export default function HostTable() {
                     </thead>
                     <tbody>
                         {currentItems.map((data) => (
-                            <tr key={data.id} className="border-b whitespace-nowrap">
+                            <tr key={data.sl} className="border-b whitespace-nowrap">
                                 <td className="px-4 py-4">{data.sl}</td>
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
                                     {data.fullName}
@@ -400,7 +411,7 @@ export default function HostTable() {
                 </form>
             </Modal>
             <Modal open={actionModalOpen} >
-                <form ref={ref} className=''>
+                <div ref={ref} className=''>
                     <div className="px-7 py-9 bg-white rounded-md  max-w-[400px] w-full  border-4 border-primary">
                         <div className="">
                             <p className="text-xl font-bold text-[#5C2D95] mb-5">Host</p>
@@ -432,7 +443,11 @@ export default function HostTable() {
                                     Bean Exchange
                                 </label>
                             </div>
-                            <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                            <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold" onClick={() => {
+                                setConfNextFunc(() => handleSend)
+                                setConfModalTitle('Are you sure to remove this agency?');
+                                setconfModalOpen(true)
+                            }}>
                                 Send
                             </button>
                             <div className="flex items-center gap-2">
@@ -446,8 +461,10 @@ export default function HostTable() {
                         </div>
                     </div>
 
-                </form>
+                </div>
             </Modal>
+            <ConfirmModal open={confModalOpen} setOpen={setconfModalOpen} title={confModalTitle} nextFunc={confNextFunc} />
+
         </div >
 
     );

@@ -1,16 +1,16 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 
-const Modal = ({ open, setOpen, children }) => {
+const Modal = ({ open, setOpen, children, className }) => {
 
     return (
         <div >
             {
                 open &&
                 <>
-                    <div className='absolute top-0 left-0 z-30 w-full min-h-[calc(100vh-104px)]  bg-primary opacity-30 blur-2xl'>
+                    <div className={`absolute top-0 left-0 z-30 w-full min-h-[calc(100vh-104px)]  bg-primary opacity-30 blur-2xl `}>
                     </div>
-                    <div className=" fixed h-screen top-0 left-0 flex z-50 w-full items-center justify-center">
+                    <div className={` fixed h-screen top-0 left-0 flex z-50 w-full items-center justify-center ${className}`}>
                         {children}
                     </div>
                 </>
