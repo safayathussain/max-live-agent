@@ -5,20 +5,24 @@ import logo from '@/public/logo.svg'
 import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "@/redux/slices/AuthSlice";
 import { useEffect } from "react";
-
+import { useRouter } from "next/navigation";
+import { loginUser } from "@/utils/functions";
 
 const page = () => {
- const auth = useSelector((state) => state.auth)
-  const dispatch = useDispatch()
-  useEffect(() => {
-    
-    dispatch(setAuth({name: 'safayat'}))
-    console.log(auth)
-  }, [])
+
+  const router = useRouter()
+  const auth = useSelector(state => state.auth.user)
+  if (auth.role === 'AG') return router.push('/dashboard/')
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value
+    const password = e.target.pass.value
+    await loginUser(email, password, () => router.push('/dashboard/'))
+  }
   
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="bg-white mt-6 py-8 px-5 rounded-xl flex flex-col items-center w-96">
+      <form onSubmit={handleSubmit} className="bg-white mt-6 py-8 px-5 rounded-xl flex flex-col items-center w-96">
         <div className="flex justify-center mb-4">
           <Image src={logo}></Image>
         </div>
@@ -30,6 +34,7 @@ const page = () => {
           <div className="relative w-full">
             <input
               type="email"
+              name="email"
               id="emailField"
               className="block font-medium focus:border-lightGray text-black px-2.5 pb-2.5 pt-4 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
               placeholder=" "
@@ -45,6 +50,7 @@ const page = () => {
           <div className="relative w-full">
             <input
               type="password"
+              name="pass"
               id="passField"
               className="block font-medium focus:border-lightGray text-black px-2.5 pt-4 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
               placeholder=" "
@@ -61,11 +67,11 @@ const page = () => {
           </div>
         </div>
         <div className="mt-2 max-w-[350px] w-full ">
-          <button className=" bg-primary  w-full py-2 rounded-lg text-white font-semibold">
+          <button type="submit" className=" bg-primary  w-full py-2 rounded-lg text-white font-semibold">
             Send
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
