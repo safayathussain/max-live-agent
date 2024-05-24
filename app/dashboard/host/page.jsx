@@ -67,44 +67,7 @@ const page = () => {
                         </div>
                     </form>
                 </Modal>
-                {/* <Modal open={open} setOpen={setopen} >
-                    <form ref={ref} className=''>
-                        <div className="px-7 py-9 bg-white rounded-md  max-w-[400px] w-full  border-4 border-primary">
-                            <div className="">
-                                <p className="text-xl font-bold text-[#5C2D95]">Host Details</p>
-                                <div className='grid grid-cols-2 w-full mt-5 gap-4'>
-                                    <div className='p-4 bg-silver w-full rounded-md text-secondary'>
-                                        <p className='text-sm'>Daily earnings</p>
-                                        <p className='text-xl font-bold'>31,321</p>
-                                    </div>
-                                    <div className='p-4 bg-silver w-full rounded-md text-secondary'>
-                                        <p className='text-sm'>Daily earnings</p>
-                                        <p className='text-xl font-bold'>31,321</p>
-                                    </div>
-                                    <div className='p-4 bg-silver w-full rounded-md text-secondary'>
-                                        <p className='text-sm'>Daily earnings</p>
-                                        <p className='text-xl font-bold'>31,321</p>
-                                    </div>
-                                    <div className='p-4 bg-lightPink w-full rounded-md text-white'>
-                                        <p className='text-sm'>Current earnings</p>
-                                        <p className='text-xl font-bold'>31,321</p>
-                                    </div>
-                                </div>
-                                <div className='bg-silver border border-primary p-4 mt-4'>
-                                    <p className="text-xl font-bold text-[#5C2D95]">Host Details</p>
-                                    <div className='mt-2 flex flex-col gap-1 text-sm'>
-                                        <p>Agancy ID: Safayat Hussain</p>
-                                        <p>Agency Name :: Safayat Hussain</p>
-                                        <p>Total Host Salary : 12231</p>
-                                        <p>Agancy ID: Safayat Hussain</p>
-                                        <p>Agancy ID: Safayat Hussain</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
-                </Modal> */}
+               
             </div>
         </div>
     );

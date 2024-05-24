@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useClickOutside from "@/hooks/useClickOutside";
 import Modal from "@/components/Modal";
+import { FetchApi } from "@/utils/FetchApi";
 
 export default function SalaryTable() {
-    const dummyProducts = [
+    const dummyusers = [
         {
             sl: 1,
             id: 1,
@@ -57,20 +58,28 @@ export default function SalaryTable() {
 
     ];
 
-    const [products, setProducts] = useState(dummyProducts);
+    const [users, setUsers] = useState([]);
+    const [paginationData, setPaginationData] = useState({})
+
     const [searchTerm, setSearchTerm] = useState("");
     const [sortBy, setSortBy] = useState(null);
     const [sortOrder, setSortOrder] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
-    const [showMenu, setShowMenu] = useState(false);
     const [open, setOpen] = useState(false);
 
     const ref = useRef(null);
     useClickOutside(ref, () => {
         setOpen(false);
     });
-
+    useEffect(() => {
+        const loadData = async () => {
+            const { data } = await FetchApi({ url: `user/getAllUser?page=${currentPage}&limit=5` })
+            setUsers(data?.users?.users)
+            setPaginationData(data?.users?.pagination)
+        }
+        loadData()
+    }, [currentPage])
     // Function to handle search input
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -88,12 +97,12 @@ export default function SalaryTable() {
         }
     };
 
-    let filteredProducts = products.filter((product) =>
-        product.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    let filteredusers = users.filter((user) =>
+        user._id.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
+    console.log(searchTerm)
     if (sortBy) {
-        filteredProducts = filteredProducts.sort((a, b) => {
+        filteredusers = filteredusers.sort((a, b) => {
             const compareA = a[sortBy];
             const compareB = b[sortBy];
             if (compareA < compareB) {
@@ -106,17 +115,8 @@ export default function SalaryTable() {
         });
     }
 
-    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${currentPage * itemsPerPage
-        } of ${filteredProducts.length}`;
     // Pagination
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filteredProducts.slice(
-        indexOfFirstItem,
-        indexOfLastItem
-    );
-    const data = filteredProducts;
-    const dataPerPage = itemsPerPage;
+    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${(currentPage * itemsPerPage) < paginationData?.totalCount ? (currentPage * itemsPerPage) : paginationData?.totalCount} of ${paginationData?.totalCount}`;
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -138,7 +138,7 @@ export default function SalaryTable() {
                                 htmlFor="emailField"
                                 className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                             >
-                                Search By Name
+                                Search by id
                             </label>
                         </div>
                     </form>
@@ -264,15 +264,15 @@ export default function SalaryTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map((data) => (
-                            <tr key={data.id} className="border-b whitespace-nowrap">
-                                <td className="px-4 py-4">{data.sl}</td>
+                        {filteredusers.map((user, i) => (
+                            <tr key={user._id} className="border-b whitespace-nowrap">
+                                <td className="px-4 py-4">{i + 1}</td>
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
-                                    {data.fullName}
+                                    {user.firstName}
                                 </td>
-                                <td className="px-4 py-4">{data.email}</td>
-                                <td className="px-4 py-4">{data.date}</td>
-                                <td className="px-4 py-4">{data.beans}</td>
+                                <td className="px-4 py-4">{user.email}</td>
+                                <td className="px-4 py-4">{user.date}</td>
+                                <td className="px-4 py-4">{user.beans}</td>
 
                             </tr>
                         ))}
@@ -315,10 +315,10 @@ export default function SalaryTable() {
                                     {currentPage}
                                 </button>
                                 {
-                                    currentPage !== Math.ceil(data.length / dataPerPage) &&
+                                    currentPage !== Number(paginationData?.totalPages) &&
                                     <button
                                         disabled={
-                                            currentPage === Math.ceil(data.length / dataPerPage)
+                                            currentPage === Number(paginationData?.totalPages)
                                         }
                                         onClick={() => paginate(currentPage + 1)}
                                         className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
@@ -334,13 +334,13 @@ export default function SalaryTable() {
                                 <button
                                     className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
                                 >
-                                    {Math.ceil(data.length / dataPerPage)}
+                                    {Number(paginationData?.totalPages)}
                                 </button>
                                 <button
                                     className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
                                     onClick={() => paginate(currentPage + 1)}
                                     disabled={
-                                        currentPage === Math.ceil(data.length / dataPerPage)
+                                        currentPage === Number(paginationData?.totalPages)
                                     }
                                 >
                                     &#x2192;
