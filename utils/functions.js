@@ -25,3 +25,7 @@ export const loginUser = async (email, password, func) => {
   return res;
   
 }
+
+export const logoutUser = () => {
+  store.dispatch(setAuth({}))
+}

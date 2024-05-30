@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { HiMenu } from 'react-icons/hi';
 import logo from '@/public/logo.svg'
 import { usePathname } from 'next/navigation';
-import { capitalizeAllWords } from '@/utils/functions';
+import { capitalizeAllWords, logoutUser } from '@/utils/functions';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { setAuth } from '@/redux/slices/AuthSlice';
@@ -13,7 +13,6 @@ import { setAuth } from '@/redux/slices/AuthSlice';
 const Navbar = () => {
 
     const pathname = usePathname()
-    const dispatch = useDispatch()
     const pageTitle = capitalizeAllWords((pathname?.split('/')[2])?.replace('-', ' ') || 'dashboard')
 
     return (
@@ -33,7 +32,7 @@ const Navbar = () => {
                         </Link>
                     </div>
                     <div>
-                        <button onClick={() => dispatch(setAuth({}))} className='rounded-full hidden lg:block bg-white border border-error text-error px-2 py-1 md:px-4 md:py-2 text-xxs whitespace-nowrap md:text-sm font-medium'>
+                        <button onClick={logoutUser} className='rounded-full hidden lg:block bg-white border border-error text-error px-2 py-1 md:px-4 md:py-2 text-xxs whitespace-nowrap md:text-sm font-medium'>
                             Log Out
                         </button>
                     </div>
