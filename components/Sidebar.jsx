@@ -7,6 +7,7 @@ import logo from "@/public/logo.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "../app/globals.css";
+import { logoutUser } from "@/utils/functions";
 
 const Sidebar = ({ open, setOpen }) => {
   const pathname = usePathname();
@@ -139,7 +140,7 @@ const Sidebar = ({ open, setOpen }) => {
           } transition-all duration-300 transform  fixed top-0 start-0 bottom-0 z-[60] w-64 pt-7 pb-10 overflow-y-auto lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 `}
       >
         <div className="px-6 flex justify-center">
-          <a className="flex-none font-semibold " href="#">
+          <a className="flex-none font-semibold " href="/">
             <Image src={logo}></Image>
           </a>
         </div>
@@ -178,7 +179,7 @@ const Sidebar = ({ open, setOpen }) => {
             </ul>
           </nav>
           <div className="w-full flex justify-center ">
-            <button className='rounded-md block lg:hidden bg-white border border-error text-error w-full mx-5 py-2 text-sm whitespace-nowrap  font-medium'>
+            <button onClick={logoutUser} className='rounded-md block lg:hidden bg-white border border-error text-error w-full mx-5 py-2 text-sm whitespace-nowrap  font-medium'>
               Log Out
             </button>
           </div>

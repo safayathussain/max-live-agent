@@ -38,7 +38,8 @@ export const FetchApi = async ({
         return res
     } catch (error) {
         console.error('Request failed:', error);
-        toast.error(`${error.response?.data?.error}`)
+        toast.error(`${(error.response.data.message || error.response.data.error) || 'Something went wrong'}`)
+
         return error.response?.data
         // throw error;
     }
