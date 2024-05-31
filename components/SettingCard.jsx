@@ -4,15 +4,22 @@ import { FileUpload } from 'primereact/fileupload'
 import React, { useState } from 'react'
 import logo from '@/public/logo.svg'
 import '@/app/dashboard/prime-react.css'
+import TextInput from '@/components/TextInput';
 
 const SettingCard = () => {
     const [showUploadField, setShowUploadField] = useState(false)
-    setTimeout(() => {
-        setShowUploadField(true)
-        return
-    }, 2000)
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        const formData = new FormData(event.currentTarget)
+        console.log({
+            agency: formData.get('agency'),
+            country: formData.get('country'),
+        })
+    }
+
     return (
-        <div>
+        <form onSubmit={handleSubmit}>
             <div className='bg-white flex px-8 py-8 rounded-xl gap-5 flex-col w-max min-w-[350px] '>
                 <div className='relative w-max'>
                     <Image src={logo} alt='' className='rounded-full'></Image>
@@ -30,18 +37,16 @@ const SettingCard = () => {
                     </div>
                 </div>
                 <div className="relative w-full">
-                    <input type="text" id="agency" className="block font-medium focus:border-lightGray text-black px-2.5 pb-2.5 pt-4 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer" placeholder=" " />
-                    <label htmlFor="agency" className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Agancy Name</label>
+                <TextInput label={'Agency Name'} name={'Search'} id={'idSearch'}/>
                 </div>
                 <div className="relative w-full">
-                    <input type="text" id="country" className="block font-medium focus:border-lightGray text-black px-2.5 pb-2.5 pt-4 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer" placeholder=" " />
-                    <label htmlFor="country" className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Country Name</label>
+                <TextInput label={'Country Name'} name={'Search'} id={'idSearch'}/>
                 </div>
-                <button className='px-4 py-1 rounded-md bg-[#F5AAE9] text-base font-medium text-white w-max'>
+                <button type="submit" className='px-4 py-1 rounded-md bg-[#F5AAE9] text-base font-medium text-white w-max'>
                     Save
                 </button>
             </div>
-        </div>
+        </form>
     )
 }
 

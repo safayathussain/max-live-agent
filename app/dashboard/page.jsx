@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import React from 'react'
 import { FileUpload } from 'primereact/fileupload';
-
 import SettingCard from '@/components/SettingCard';
+import TextInput from '@/components/TextInput';
 const page = () => {
   
   const data = [
