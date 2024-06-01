@@ -7,6 +7,8 @@ import { setAuth } from "@/redux/slices/AuthSlice";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/utils/functions";
+import TextInput from "@/components/TextInput";
+
 
 const page = () => {
 
@@ -32,35 +34,11 @@ const page = () => {
         <div className="flex flex-col max-w-[350px] w-full mt-8 gap-4">
           {/* email */}
           <div className="relative w-full">
-            <input
-              type="email"
-              name="email"
-              id="emailField"
-              className="block font-medium focus:border-lightGray text-black px-2.5 pb-2.5 pt-4 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
-              placeholder=" "
-            />
-            <label
-              htmlFor="emailField"
-              className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-            >
-              Email
-            </label>
+          <TextInput label={'Email'} name={'email'} id={'emailField'}/>
           </div>
           {/* password */}
           <div className="relative w-full">
-            <input
-              type="password"
-              name="pass"
-              id="passField"
-              className="block font-medium focus:border-lightGray text-black px-2.5 pt-4 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
-              placeholder=" "
-            />
-            <label
-              htmlFor="passField"
-              className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white  px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-            >
-              Password
-            </label>
+          <TextInput label={'Password'} name={'password'} id={'passwordField'}/>
           </div>
           <div className="flex justify-end">
             <Link className="text-xs text-primary underline" href="/reset-password">Reset Password?</Link>

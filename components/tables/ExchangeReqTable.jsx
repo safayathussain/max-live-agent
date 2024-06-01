@@ -285,7 +285,7 @@ export default function HostTable() {
                 {/* Pagination */}
                 <div className="flex justify-start md:justify-end items-center">
                     <nav aria-label="Pagination">
-                        <ul className="inline-flex border rounded-sm shadow-md">
+                        <ul className="inline-flex border rounded-sm">
                             <li>
                                 <button
                                     className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
