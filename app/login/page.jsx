@@ -6,14 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "@/redux/slices/AuthSlice";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/utils/functions";
+import { getAuth, loginUser } from "@/utils/functions";
 import TextInput from "@/components/TextInput";
 
 
 const page = () => {
 
   const router = useRouter()
-  const auth = useSelector(state => state.auth.user)
+  const auth = getAuth()
   if (auth.role === 'AG') return router.push('/dashboard/')
   const handleSubmit = async (e) => {
     e.preventDefault();

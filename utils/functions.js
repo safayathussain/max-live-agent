@@ -1,6 +1,7 @@
 import { store } from "@/redux/store";
 import { FetchApi } from "./FetchApi";
 import { setAuth } from "@/redux/slices/AuthSlice";
+import { jwtDecode } from "jwt-decode";
 
 export function capitalizeAllWords(str) {
   const words = str.split(' ');
@@ -21,11 +22,22 @@ export const loginUser = async (email, password, func) => {
     store.dispatch(setAuth(res?.data.user))
 
   }
-  
+
   return res;
-  
+
 }
 
 export const logoutUser = () => {
   store.dispatch(setAuth({}))
+}
+
+
+export const getAuth = () => {
+  const auth = store.getState().auth?.user
+  if (auth?.accessToken) {
+    const data = jwtDecode(auth?.accessToken || '')
+    return data.agency
+  } else {
+    return {}
+  }
 }
