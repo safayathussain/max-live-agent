@@ -4,6 +4,7 @@ import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Providers from "@/components/Providers";
 import { Toaster } from "react-hot-toast";
+import NextTopLoader from 'nextjs-toploader';
 const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
       <body className={`${poppins.variable} bg-[#EEF0F6] overflow-x-hidden`}>
         <Providers>
           <Toaster/>
+          <NextTopLoader color="#50C878" height={4} showSpinner={false} speed={200} easing="ease"/>
           {children}
         </Providers>
       </body>

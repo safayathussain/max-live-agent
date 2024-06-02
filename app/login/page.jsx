@@ -31,14 +31,14 @@ const page = () => {
         <div className="text-center">
           <p className="text-xl font-semibold text-[#5C2D95]">Please Login</p>
         </div>
-        <div className="flex flex-col max-w-[350px] w-full mt-8 gap-4">
+        <div className="flex flex-col max-w-[350px] w-full mt-8 gap-2">
           {/* email */}
           <div className="relative w-full">
-          <TextInput label={'Email'} name={'email'} id={'emailField'}/>
+          <TextInput label={'Email'} name={'email'} id={'email'}/>
           </div>
           {/* password */}
           <div className="relative w-full">
-          <TextInput label={'Password'} name={'password'} id={'passwordField'}/>
+          <TextInput label={'Password'} name={'password'} id={'pass'}/>
           </div>
           <div className="flex justify-end">
             <Link className="text-xs text-primary underline" href="/reset-password">Reset Password?</Link>
