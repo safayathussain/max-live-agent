@@ -7,8 +7,6 @@ import logo from '@/public/logo.svg'
 import { usePathname } from 'next/navigation';
 import { capitalizeAllWords, logoutUser } from '@/utils/functions';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
-import { setAuth } from '@/redux/slices/AuthSlice';
 
 const Navbar = () => {
 

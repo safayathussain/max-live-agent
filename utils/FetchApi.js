@@ -33,7 +33,7 @@ export const FetchApi = async ({
         } else {
             throw new Error('Invalid HTTP method');
         }
-        callback()
+         callback()
         const res = { data: response?.data, status: response?.status, }
         return res
     } catch (error) {

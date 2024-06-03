@@ -8,22 +8,16 @@ import { capitalizeAllWords, getAuth } from '@/utils/functions';
 import toast from 'react-hot-toast';
 import { setAuth } from '@/redux/slices/AuthSlice';
 import { FetchApi } from '@/utils/FetchApi';
+import { useDispatch } from 'react-redux';
 
 const Page = () => {
+  const dispatch = useDispatch()
   const authData = getAuth();
   const updateUser = async (body) => {
-    const res = await FetchApi({ url: `/agency/${authData._id}`, method: 'put', data: body, callback: () => {
+    const response = await FetchApi({ url: `/agency/${authData._id}`, method: 'put', data: body, callback: () => {
       toast.success('Profile updated successfully')
-      store.dispatch(setAuth(res?.data.user))
     }});
-    // if (res.status === 200) {
-    //   store.dispatch(setAuth(res?.data.user))
-    //   console.log(res?.data)
-  
-    // }
-  
-    return res;
-  
+    dispatch(setAuth(response?.data?.editAgency))
   }
 
   const [showUploadField, setShowUploadField] = useState(false);

@@ -29,6 +29,7 @@ export const loginUser = async (email, password, func) => {
 
 export const logoutUser = () => {
   store.dispatch(setAuth({}))
+  window.location = '/login'
 }
 
 
@@ -37,6 +38,8 @@ export const getAuth = () => {
   if (auth?.accessToken) {
     const data = jwtDecode(auth?.accessToken || '')
     return data.agency
+  } else if (auth.role === 'AG') {
+    return auth
   } else {
     return {}
   }

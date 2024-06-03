@@ -7,7 +7,7 @@ import logo from "@/public/logo.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "../app/globals.css";
-import { logoutUser } from "@/utils/functions";
+import { logoutUser } from "@/utils/functions.js";
 
 const Sidebar = ({ open, setOpen }) => {
   const pathname = usePathname();
