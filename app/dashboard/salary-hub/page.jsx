@@ -1,4 +1,3 @@
-import Table from '@/components/Table'
 import SalaryTable from '@/components/tables/SalaryTable.jsx'
 import React from 'react'
 

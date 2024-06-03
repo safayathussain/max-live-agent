@@ -1,12 +1,6 @@
 "use client";
-import Table from "@/components/Table";
-import { FaBell } from "react-icons/fa";
-import Modal from "@/components/Modal";
 import { useRef, useState } from "react";
 import useClickOutside from "@/hooks/useClickOutside";
-import Image from "next/image";
-import logo from "@/public/logo.svg";
-import Link from "next/link";
 import ExchangeReqTable from "@/components/tables/ExchangeReqTable";
 
 const page = () => {

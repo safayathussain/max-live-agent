@@ -40,8 +40,6 @@ export default function HostTable() {
         }
     });
 
-
-
     // Function to handle sorting
     const handleSort = (key) => {
         if (key === sortBy) {
