@@ -6,58 +6,7 @@ import Modal from "@/components/Modal";
 import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
 export default function SalaryTable() {
-    const dummyusers = [
-        {
-            sl: 1,
-            id: 1,
-            fullName: "Safayat Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 2,
-            id: 1,
-            fullName: "Safayat Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 3,
-            id: 1,
-            fullName: "Safayat Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 4,
-            id: 1,
-            fullName: "Safayat dsa Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 5,
-            id: 1,
-            fullName: "Safayat dsa Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 6,
-            id: 1,
-            fullName: "Safayat dsa Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-
-    ];
-
+   
     const [users, setUsers] = useState([]);
     const [paginationData, setPaginationData] = useState({})
 
@@ -72,18 +21,24 @@ export default function SalaryTable() {
     useClickOutside(ref, () => {
         setOpen(false);
     });
+    const loadData = async () => {
+        const { data } = await FetchApi({ url: `user/getAllUser` })
+        setUsers(data?.users.users)
+    }
     useEffect(() => {
-        const loadData = async () => {
-            const { data } = await FetchApi({ url: `user/getAllUser?page=${currentPage}&limit=5` })
-            setUsers(data?.users?.users)
-            setPaginationData(data?.users?.pagination)
-        }
         loadData()
-    }, [currentPage])
-    // Function to handle search input
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
+    }, [])
+    let searchedUsers = users.filter((user) =>
+        user._id.includes(searchTerm)
+    );
+    useClickOutside(ref, () => {
+        setOpen(false);
+        if (!confModalOpen) {
+            setActionModalOpen(false)
+        }
+    });
+
+
 
     // Function to handle sorting
     const handleSort = (key) => {
@@ -97,12 +52,8 @@ export default function SalaryTable() {
         }
     };
 
-    let filteredusers = users.filter((user) =>
-        user._id.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    console.log(searchTerm)
     if (sortBy) {
-        filteredusers = filteredusers.sort((a, b) => {
+        searchedUsers = searchedUsers.sort((a, b) => {
             const compareA = a[sortBy];
             const compareB = b[sortBy];
             if (compareA < compareB) {
@@ -112,13 +63,19 @@ export default function SalaryTable() {
                 return sortOrder === "asc" ? 1 : -1;
             }
             return 0;
-        });
+        })
     }
 
     // Pagination
-    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${(currentPage * itemsPerPage) < paginationData?.totalCount ? (currentPage * itemsPerPage) : paginationData?.totalCount} of ${paginationData?.totalCount}`;
-
+    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${((currentPage - 1) * itemsPerPage) < Math.ceil(searchedUsers.length / itemsPerPage) ? (currentPage * itemsPerPage) : searchedUsers.length} of ${searchedUsers.length}`;
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentUsers = searchedUsers.slice(
+        indexOfFirstItem,
+        indexOfLastItem
+    );
 
     return (
         <div className=" overflow-hidden mx-8">
@@ -126,7 +83,7 @@ export default function SalaryTable() {
                 <div className="w-full md:w-1/2 py-1">
                     <form className="flex items-center">
                         <div className="relative w-full">
-                        <TextInput placeholder={'Search By Id'} name={'Search'} id={'idSearch'}/>
+                            <TextInput onChange={(e) => setSearchTerm(e.target.value)} placeholder={'Search By Id'} name={'Search'} id={'idSearch'} />
                         </div>
                     </form>
                 </div>
@@ -247,19 +204,28 @@ export default function SalaryTable() {
                                     </svg>
                                 </span>
                             </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Action
+
+                                </span>
+                            </th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredusers.map((user, i) => (
+                        {currentUsers.map((user, i) => (
                             <tr key={user._id} className="border-b whitespace-nowrap">
-                                <td className="px-4 py-4">{i + 1}</td>
+                                <td className="px-4 py-4">{user._id}</td>
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
                                     {user.firstName}
                                 </td>
                                 <td className="px-4 py-4">{user.email}</td>
                                 <td className="px-4 py-4">{user.date}</td>
                                 <td className="px-4 py-4">{user.beans}</td>
+                                <td className="px-4 py-4 font-extrabold text-xl cursor-pointer" onClick={() => setActionModalOpen(true)}>...</td>
 
                             </tr>
                         ))}
@@ -302,10 +268,10 @@ export default function SalaryTable() {
                                     {currentPage}
                                 </button>
                                 {
-                                    currentPage !== Number(paginationData?.totalPages) &&
+                                    currentPage !== Math.ceil(searchedUsers.length / itemsPerPage) &&
                                     <button
                                         disabled={
-                                            currentPage === Number(paginationData?.totalPages)
+                                            currentPage === Math.ceil(searchedUsers.length / itemsPerPage)
                                         }
                                         onClick={() => paginate(currentPage + 1)}
                                         className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
@@ -321,13 +287,13 @@ export default function SalaryTable() {
                                 <button
                                     className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
                                 >
-                                    {Number(paginationData?.totalPages)}
+                                    {Math.ceil(searchedUsers.length / itemsPerPage)}
                                 </button>
                                 <button
                                     className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
                                     onClick={() => paginate(currentPage + 1)}
                                     disabled={
-                                        currentPage === Number(paginationData?.totalPages)
+                                        currentPage === Math.ceil(searchedUsers.length / itemsPerPage)
                                     }
                                 >
                                     &#x2192;

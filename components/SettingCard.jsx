@@ -20,7 +20,7 @@ const SettingCard = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div className='bg-white flex px-8 py-8 rounded-xl gap-5 flex-col w-max min-w-[350px] '>
+            <div className='bg-white flex px-8 py-8 rounded-xl gap-3 flex-col w-max min-w-[350px] '>
                 <div className='relative w-max'>
                     <Image src={logo} alt='' className='rounded-full'></Image>
                     <button className='bg-error rounded-full flex justify-center items-center size-7 absolute right-2 top-[70%]'>
@@ -37,10 +37,10 @@ const SettingCard = () => {
                     </div>
                 </div>
                 <div className="relative w-full">
-                <TextInput label={'Agency Name'} name={'Search'} id={'idSearch'}/>
+                    <TextInput label={'Agency Name'} name={'Search'} id={'idSearch'} />
                 </div>
                 <div className="relative w-full">
-                <TextInput label={'Country Name'} name={'Search'} id={'idSearch'}/>
+                    <TextInput label={'Country Name'} name={'Search'} id={'idSearch'} />
                 </div>
                 <button type="submit" className='px-4 py-1 rounded-md bg-[#F5AAE9] text-base font-medium text-white w-max'>
                     Save

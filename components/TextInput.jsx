@@ -4,8 +4,8 @@ const TextInput = ({ label, id, name, type = 'text', className, placeholder, ...
     return (
         <div>
             <div>
-                <label for={id} class="block text-gray-800 font-medium text-sm">{label}</label>
-                <div class="mt-0.5">
+                <label htmlFor={id} className="block text-gray-800 font-medium text-sm">{label}</label>
+                <div className="mt-0.5">
                     <input
                         placeholder={placeholder}
                         id={id}
