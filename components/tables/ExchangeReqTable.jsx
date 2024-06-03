@@ -6,60 +6,9 @@ import Modal from "@/components/Modal";
 import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
 export default function HostTable() {
-    const dummyusers = [
-        {
-            sl: 1,
-            id: 1,
-            fullName: "Safayat Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 2,
-            id: 1,
-            fullName: "Safayat Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 3,
-            id: 1,
-            fullName: "Safayat Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 4,
-            id: 1,
-            fullName: "Safayat dsa Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 5,
-            id: 1,
-            fullName: "Safayat dsa Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
-        {
-            sl: 6,
-            id: 1,
-            fullName: "Safayat dsa Hussain",
-            email: "safayat@gmail.com",
-            date: "12 May, 2023",
-            beans: 1203,
-        },
 
-    ];
 
     const [users, setUsers] = useState([]);
-    const [paginationData, setPaginationData] = useState({})
     const [searchTerm, setSearchTerm] = useState("");
     const [sortBy, setSortBy] = useState(null);
     const [sortOrder, setSortOrder] = useState("asc");
@@ -73,18 +22,19 @@ export default function HostTable() {
         setOpen(false);
         setActionModalOpen(false)
     });
+
+    const loadData = async () => {
+        const { data } = await FetchApi({ url: `user/getAllUser` })
+        setUsers(data?.users.users)
+    }
     useEffect(() => {
-        const loadData = async () => {
-            const { data } = await FetchApi({ url: `user/getAllUser?page=${currentPage}&limit=5` })
-            setUsers(data?.users?.users)
-            setPaginationData(data?.users?.pagination)
-        }
         loadData()
-    }, [currentPage])
-    // Function to handle search input
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
+    }, [])
+    let searchedUsers = users.filter((user) =>
+        user._id.includes(searchTerm)
+    );
+
+
 
     // Function to handle sorting
     const handleSort = (key) => {
@@ -98,12 +48,8 @@ export default function HostTable() {
         }
     };
 
-    let filteredusers = users.filter((user) =>
-        user._id.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
     if (sortBy) {
-        filteredusers = filteredusers.sort((a, b) => {
+        searchedUsers = searchedUsers.sort((a, b) => {
             const compareA = a[sortBy];
             const compareB = b[sortBy];
             if (compareA < compareB) {
@@ -113,21 +59,26 @@ export default function HostTable() {
                 return sortOrder === "asc" ? 1 : -1;
             }
             return 0;
-        });
+        })
     }
 
-
     // Pagination
-    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${(currentPage * itemsPerPage) < paginationData?.totalCount ? (currentPage * itemsPerPage) : paginationData?.totalCount} of ${paginationData?.totalCount}`;
+    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${((currentPage - 1) * itemsPerPage) < Math.ceil(searchedUsers.length / itemsPerPage) ? (currentPage * itemsPerPage) : searchedUsers.length} of ${searchedUsers.length}`;
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentUsers = searchedUsers.slice(
+        indexOfFirstItem,
+        indexOfLastItem
+    );
     return (
         <div className=" overflow-hidden mx-8">
             <div className="flex flex-col md:flex-row items-center justify-between  pb-4">
                 <div className="w-full md:w-1/2 py-1">
                     <form className="flex items-center">
                         <div className="relative w-full">
-                        <TextInput placeholder={'Search By Id'} name={'Search'} id={'idSearch'}/>
+                            <TextInput onChange={(e) => setSearchTerm(e.target.value)} placeholder={'Search By Id'} name={'Search'} id={'idSearch'} />
                         </div>
                     </form>
                 </div>
@@ -260,9 +211,9 @@ export default function HostTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredusers.map((user,i) => (
+                        {currentUsers.map((user, i) => (
                             <tr key={user._id} className="border-b whitespace-nowrap">
-                                <td className="px-4 py-4">{i + 1}</td>
+                                <td className="px-4 py-4">{user._id}</td>
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
                                     {user.firstName}
                                 </td>
@@ -312,10 +263,10 @@ export default function HostTable() {
                                     {currentPage}
                                 </button>
                                 {
-                                    currentPage !== Number(paginationData?.totalPages) &&
+                                    currentPage !== Math.ceil(searchedUsers.length / itemsPerPage) &&
                                     <button
                                         disabled={
-                                            currentPage === Number(paginationData?.totalPages)
+                                            currentPage === Math.ceil(searchedUsers.length / itemsPerPage)
                                         }
                                         onClick={() => paginate(currentPage + 1)}
                                         className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
@@ -331,13 +282,13 @@ export default function HostTable() {
                                 <button
                                     className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
                                 >
-                                    {Number(paginationData?.totalPages)}
+                                    {Math.ceil(searchedUsers.length / itemsPerPage)}
                                 </button>
                                 <button
                                     className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
                                     onClick={() => paginate(currentPage + 1)}
                                     disabled={
-                                        currentPage === Number(paginationData?.totalPages)
+                                        currentPage === Math.ceil(searchedUsers.length / itemsPerPage)
                                     }
                                 >
                                     &#x2192;
@@ -398,7 +349,7 @@ export default function HostTable() {
                                     placeholder=" "
                                 />
                                 <label
-                                    htmlFor="coinField"
+                                    htmlhtmlFor="coinField"
                                     className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                                 >
                                     Coin Exchange
@@ -412,7 +363,7 @@ export default function HostTable() {
                                     placeholder=" "
                                 />
                                 <label
-                                    htmlFor="beanField"
+                                    htmlhtmlFor="beanField"
                                     className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
                                 >
                                     Bean Exchange

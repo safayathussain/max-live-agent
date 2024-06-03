@@ -9,9 +9,7 @@ import { useSelector } from "react-redux";
 const DashboardLayout = ({ children }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter()
-    const auth = useSelector(state => state.auth.user)
     const authData = getAuth()
-    console.log(authData)
     if (!authData || authData.role !== 'AG') return router.push('/login')
     return (
         <div className='min-h-screen'>
