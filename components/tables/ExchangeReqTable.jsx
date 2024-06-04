@@ -226,6 +226,11 @@ export default function HostTable() {
                         ))}
                     </tbody>
                 </table>
+                {/* {
+                    currentUsers.length === 0 && <div className="w-full my-12 text-lightGray flex items-center justify-center">
+                        <p className="text-xl font-medium text-center">No Data Found</p>
+                    </div>
+                } */}
             </div>
             {/* page footer */}
             <div className="flex flex-col gap-3 md:flex-row justify-between my-10 md:px-5">

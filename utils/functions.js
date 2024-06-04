@@ -19,7 +19,7 @@ export const loginUser = async (email, password, func) => {
   const res = await FetchApi({ url: '/agency/agencySignin', method: 'post', data: { email, password }, callback: func })
   console.log(res)
   if (res.status === 200) {
-    store.dispatch(setAuth(res?.data.user))
+    store.dispatch(setAuth(res?.data.user.agency))
 
   }
 
@@ -37,6 +37,7 @@ export const getAuth = () => {
   const auth = store.getState().auth?.user
   if (auth?.accessToken) {
     const data = jwtDecode(auth?.accessToken || '')
+    console.log(data)
     return data.agency
   } else if (auth.role === 'AG') {
     return auth
