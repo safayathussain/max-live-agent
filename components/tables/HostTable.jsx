@@ -25,13 +25,14 @@ export default function HostTable() {
     const auth = getAuth()
     const loadData = async () => {
         const { data } = await FetchApi({ url: `/agency/hosts?agencyId=${auth.agencyId}` })
+        console.log(data)
         setUsers(data?.hosts)
     console.log(data)    
     }
     useEffect(() => {
         loadData()
     }, [])
-    let searchedUsers = users.filter((user) =>
+    let searchedUsers = users?.filter((user) =>
         user._id.includes(searchTerm)
     );
     const ref = useRef(null);
@@ -55,7 +56,7 @@ export default function HostTable() {
     };
 
     if (sortBy) {
-        searchedUsers = searchedUsers.sort((a, b) => {
+        searchedUsers = searchedUsers?.sort((a, b) => {
             const compareA = a[sortBy];
             const compareB = b[sortBy];
             if (compareA < compareB) {
@@ -69,12 +70,12 @@ export default function HostTable() {
     }
 
     // Pagination
-    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${((currentPage - 1) * itemsPerPage) < Math.ceil(searchedUsers.length / itemsPerPage) ? (currentPage * itemsPerPage) : searchedUsers.length} of ${searchedUsers.length}`;
+    const showingText = `Showing ${(currentPage - 1) * itemsPerPage + 1} to ${((currentPage - 1) * itemsPerPage) < Math.ceil(searchedUsers?.length / itemsPerPage) ? (currentPage * itemsPerPage) : searchedUsers.length} of ${searchedUsers.length}`;
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentUsers = searchedUsers.slice(
+    const currentUsers = searchedUsers?.slice(
         indexOfFirstItem,
         indexOfLastItem
     );
@@ -263,78 +264,89 @@ export default function HostTable() {
                         ))}
                     </tbody>
                 </table>
+                {
+                    currentUsers.length === 0 && <div className="w-full my-12 text-lightGray flex items-center justify-center">
+                        <p className="text-xl font-medium text-center">No Data Found</p>
+                    </div>
+                }
             </div>
             {/* page footer */}
-            <div className="flex flex-col gap-3 md:flex-row justify-between my-10 md:px-5">
-                {/* page number */}
-                <div className="flex justify-start items-center font-semibold">
-                    {showingText}
-                </div>
-                {/* Pagination */}
-                <div className="flex justify-start md:justify-end items-center">
-                    <nav aria-label="Pagination">
-                        <ul className="inline-flex border rounded-sm">
-                            <li>
-                                <button
-                                    className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
-                                    onClick={() => paginate(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                >
-                                    &#x2190;
-                                </button>
-                            </li>
-                            <li>
-                                {
-                                    currentPage !== 1 &&
+            {
+                currentUsers.length !== 0 &&
+                <div className="flex flex-col gap-3 md:flex-row justify-between my-10 md:px-5">
+                    {/* page number */}
+
+                    <div className="flex justify-start items-center font-semibold">
+                        {showingText}
+                    </div>
+                    {/* Pagination */}
+                    <div className="flex justify-start md:justify-end items-center">
+                        <nav aria-label="Pagination">
+                            <ul className="inline-flex border rounded-sm">
+                                <li>
                                     <button
+                                        className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
                                         onClick={() => paginate(currentPage - 1)}
                                         disabled={currentPage === 1}
-                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
                                     >
-                                        {currentPage - 1}
+                                        &#x2190;
                                     </button>
-                                }
-                                <button
-                                    className={`py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none`}
-                                >
-                                    {currentPage}
-                                </button>
-                                {
-                                    currentPage !== Math.ceil(searchedUsers.length / itemsPerPage) &&
+                                </li>
+                                <li>
+                                    {
+                                        currentPage !== 1 &&
+                                        <button
+                                            onClick={() => paginate(currentPage - 1)}
+                                            disabled={currentPage === 1}
+                                            className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
+                                        >
+                                            {currentPage - 1}
+                                        </button>
+                                    }
                                     <button
+                                        className={`py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none`}
+                                    >
+                                        {currentPage}
+                                    </button>
+                                    {
+                                        currentPage !== Math.ceil(searchedUsers.length / itemsPerPage) &&
+                                        <button
+                                            disabled={
+                                                currentPage === Math.ceil(searchedUsers.length / itemsPerPage)
+                                            }
+                                            onClick={() => paginate(currentPage + 1)}
+                                            className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
+                                        >
+                                            {currentPage + 1}
+                                        </button>
+                                    }
+                                    <span
+                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none cursor-not-allowed`}
+                                    >
+                                        ...
+                                    </span>
+                                    <button
+                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
+                                    >
+                                        {Math.ceil(searchedUsers.length / itemsPerPage)}
+                                    </button>
+                                    <button
+                                        className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
+                                        onClick={() => paginate(currentPage + 1)}
                                         disabled={
                                             currentPage === Math.ceil(searchedUsers.length / itemsPerPage)
                                         }
-                                        onClick={() => paginate(currentPage + 1)}
-                                        className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:!bg-gray-50 focus:outline-none `}
                                     >
-                                        {currentPage + 1}
+                                        &#x2192;
                                     </button>
-                                }
-                                <span
-                                    className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none cursor-not-allowed`}
-                                >
-                                    ...
-                                </span>
-                                <button
-                                    className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none `}
-                                >
-                                    {Math.ceil(searchedUsers.length / itemsPerPage)}
-                                </button>
-                                <button
-                                    className="py-2 px-4 text-gray-700 bg-gray-100 text-xs sm:text-sm focus:outline-none"
-                                    onClick={() => paginate(currentPage + 1)}
-                                    disabled={
-                                        currentPage === Math.ceil(searchedUsers.length / itemsPerPage)
-                                    }
-                                >
-                                    &#x2192;
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+
                 </div>
-            </div>
+            }
             <Modal open={open} >
                 <form ref={ref} className=''>
                     <div className="px-7 py-9 bg-white rounded-md  max-w-[400px] w-full  border-4 border-primary">
