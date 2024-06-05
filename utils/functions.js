@@ -14,12 +14,24 @@ export const stringToCharCode = (entityRegex) => {
   const downArrowChar = String.fromCharCode(downArrowCharCode);
   return downArrowChar
 }
-
+export const getAuth = () => {
+  const auth = store.getState().auth?.user
+  console.log(auth)
+  if (auth?.accessToken) {
+    const data = jwtDecode(auth?.accessToken || '')
+    return data.agency
+  } else if (auth?.agency?.role === 'AG') {
+    return auth.agency
+  } else {
+    return {}
+  }
+}
 export const loginUser = async (email, password, func) => {
   const res = await FetchApi({ url: '/agency/agencySignin', method: 'post', data: { email, password }, callback: func })
   console.log(res)
   if (res.status === 200) {
-    store.dispatch(setAuth(res?.data.user.agency))
+    console.log(res?.data.user)
+    store.dispatch(setAuth(res?.data.user))
 
   }
 
@@ -33,15 +45,3 @@ export const logoutUser = () => {
 }
 
 
-export const getAuth = () => {
-  const auth = store.getState().auth?.user
-  if (auth?.accessToken) {
-    const data = jwtDecode(auth?.accessToken || '')
-    console.log(data)
-    return data.agency
-  } else if (auth.role === 'AG') {
-    return auth
-  } else {
-    return {}
-  }
-}

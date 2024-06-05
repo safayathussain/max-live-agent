@@ -14,6 +14,7 @@ const page = () => {
 
   const router = useRouter()
   const auth = getAuth()
+  console.log(auth)
   if (auth?.role === 'AG') return router.push('/dashboard/')
   const handleSubmit = async (e) => {
     e.preventDefault();

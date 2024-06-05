@@ -8,16 +8,24 @@ import { capitalizeAllWords, getAuth } from '@/utils/functions';
 import toast from 'react-hot-toast';
 import { setAuth } from '@/redux/slices/AuthSlice';
 import { FetchApi } from '@/utils/FetchApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { store } from '@/redux/store';
 
 const Page = () => {
   const dispatch = useDispatch()
   const authData = getAuth();
+  const authState = useSelector(state => state.auth.user)
   const updateUser = async (body) => {
     const response = await FetchApi({ url: `/agency/${authData._id}`, method: 'put', data: body, callback: () => {
       toast.success('Profile updated successfully')
     }});
-    dispatch(setAuth(response?.data?.editAgency))
+    console.log(response.data)
+    console.log(authState)
+    const newUser = {
+      ...authState,
+      agency: response.data.editAgency
+    }
+    dispatch(setAuth(newUser))
   }
 
   const [showUploadField, setShowUploadField] = useState(false);
@@ -25,12 +33,12 @@ const Page = () => {
 
   const [profileData, setProfileData] = useState({
     agencyHolderName: authData.agencyHolderName || '',
-    email: authData.email || '',
     agencyName: authData.agencyName || '',
-    agencyId: authData.agencyId || '',
+    email: authData.email || '',
     phone: authData.phone || '',
     presentAddress: authData.presentAddress || '',
     permanentAddress: authData.permanentAddress || '',
+    agencyId: authData.agencyId || '',
     userId: authData.userId || '',
   });
 
@@ -73,7 +81,7 @@ const Page = () => {
                 {Object.keys(profileData).map((key) => (
                    <div className="relative w-full" key={key}>
                    <TextInput
-                     label={key.replace(/([A-Z])/g, ' $1').trim()}
+                     label={capitalizeAllWords(key.replace(/([A-Z])/g, ' $1').trim())}
                      value={profileData[key]}
                      name={key}
                      id={`id${key}`}
