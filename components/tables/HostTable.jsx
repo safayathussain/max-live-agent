@@ -6,6 +6,7 @@ import Modal from "@/components/Modal";
 import ConfirmModal from "../ConfirmModal";
 import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
+import { getAuth } from "@/utils/functions";
 export default function HostTable() {
 
     // confirm modal
@@ -21,10 +22,11 @@ export default function HostTable() {
     const [itemsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
     const [actionModalOpen, setActionModalOpen] = useState(false)
-
+    const auth = getAuth()
     const loadData = async () => {
-        const { data } = await FetchApi({ url: `user/getAllUser` })
-        setUsers(data?.users.users)
+        const { data } = await FetchApi({ url: `/agency/hosts?agencyId=${auth.agencyId}` })
+        setUsers(data?.hosts)
+    console.log(data)    
     }
     useEffect(() => {
         loadData()
@@ -146,6 +148,52 @@ export default function HostTable() {
                                 </div>
                             </th>
                             <th
+                                className="px-4 py-3 cursor-pointer "
+                                onClick={() => handleSort("fullName")}
+                            >
+                                <div>
+                                    <span className=" flex items-center font-medium">
+                                        host id
+                                        <svg
+                                            width="15"
+                                            height="10"
+                                            viewBox="0 0 9 5"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="ml-1"
+                                        >
+                                            <path
+                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
+                                                fill="#B5BFC9"
+                                            />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer "
+                                onClick={() => handleSort("fullName")}
+                            >
+                                <div>
+                                    <span className=" flex items-center font-medium">
+                                        user Id
+                                        <svg
+                                            width="15"
+                                            height="10"
+                                            viewBox="0 0 9 5"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="ml-1"
+                                        >
+                                            <path
+                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
+                                                fill="#B5BFC9"
+                                            />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </th>
+                            <th
                                 className="px-4 py-3 cursor-pointer"
                                 onClick={() => handleSort("email")}
                             >
@@ -171,28 +219,7 @@ export default function HostTable() {
                                 onClick={() => handleSort("date")}
                             >
                                 <span className=" flex items-center font-medium">
-                                    Date
-                                    <svg
-                                        width="15"
-                                        height="10"
-                                        viewBox="0 0 9 5"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ml-1"
-                                    >
-                                        <path
-                                            d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                            fill="#B5BFC9"
-                                        />
-                                    </svg>
-                                </span>
-                            </th>
-                            <th
-                                className="px-4 py-3 cursor-pointer"
-                                onClick={() => handleSort("beans")}
-                            >
-                                <span className=" flex items-center font-medium">
-                                    Beans
+                                    Host type
                                     <svg
                                         width="15"
                                         height="10"
@@ -211,7 +238,7 @@ export default function HostTable() {
                             <th
                                 className="px-4 py-3 cursor-pointer"
                             >
-                                <span className=" flex items-center font-medium">
+                                <span className=" flex items-center text-center font-medium">
                                     Action
 
                                 </span>
@@ -222,13 +249,14 @@ export default function HostTable() {
                     <tbody>
                         {currentUsers.map((user, i) => (
                             <tr key={user._id} className="border-b whitespace-nowrap">
-                                <td className="px-4 py-4">{user._id}</td>
+                                <td className="px-4 py-4">{i + 1}</td>
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
-                                    {user.firstName}
+                                    {user.firstName + ' ' + user.lastName}
                                 </td>
+                                <td className="px-4 py-4">{user.hostId}</td>
+                                <td className="px-4 py-4">{user._id}</td>
                                 <td className="px-4 py-4">{user.email}</td>
-                                <td className="px-4 py-4">{user.date}</td>
-                                <td className="px-4 py-4">{user.beans}</td>
+                                <td className="px-4 py-4">{user.hostType}</td>
                                 <td className="px-4 py-4 font-extrabold text-xl cursor-pointer" onClick={() => setActionModalOpen(true)}>...</td>
 
                             </tr>
