@@ -16,7 +16,7 @@ export const stringToCharCode = (entityRegex) => {
 }
 export const getAuth = () => {
   const auth = store.getState().auth?.user
-  // console.log(auth)
+  console.log(auth)
   if (auth?.accessToken) {
     const data = jwtDecode(auth?.accessToken || '')
     return data.agency

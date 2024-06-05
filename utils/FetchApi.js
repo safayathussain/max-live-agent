@@ -12,14 +12,26 @@ export const FetchApi = async ({
     callback = () => { },
     token = ''
 }) => {
-    const instance = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_BASE_API, // Set a base URL for all requests
-        // timeout: 5000, // Set a timeout for requests (in milliseconds)
-        headers: {
-            'Authorization': `Bearer ${store.getState().auth.user.sanitizedUser.accessToken || ''}`, // Authorization header
-            'Content-Type': 'application/json',
-        }
-    });
+    let instance;
+    if (url !== 'agency/agencySignin') {
+        instance = axios.create({
+            baseURL: process.env.NEXT_PUBLIC_BASE_API, // Set a base URL for all requests
+            headers: {
+                'Authorization': `Bearer ${store.getState().auth?.user?.sanitizedUser?.accessToken || ''}`, // Authorization header
+                'Content-Type': 'application/json',
+            }
+        });
+        
+    } else {
+        instance = axios.create({
+            baseURL: process.env.NEXT_PUBLIC_BASE_API, // Set a base URL for all requests
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+
+    }
 
     try {
         let response;
