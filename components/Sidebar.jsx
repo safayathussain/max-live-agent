@@ -8,6 +8,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import "../app/globals.css";
 import { logoutUser } from "@/utils/functions.js";
+import { CgProfile } from "react-icons/cg";
+
 
 const Sidebar = ({ open, setOpen }) => {
   const pathname = usePathname();
@@ -121,6 +123,13 @@ const Sidebar = ({ open, setOpen }) => {
       ),
       link: "/dashboard/salary-hub",
     },
+    {
+      title: "Profile",
+      icon: (
+        <CgProfile />
+      ),
+      link: "/dashboard/profile",
+    }
   ];
   return (
     <div className="">

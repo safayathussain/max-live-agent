@@ -25,9 +25,6 @@ const Navbar = () => {
                         <p className=' font-light text-xs whitespace-nowrap md:text-xs  text-white text-end leading-tight md:leading-3'>Super Administrator</p>
                     </div>
                     <div>
-                        <Link href={'/dashboard/profile'}>
-                            <Image className='rounded-full  size-10 md:size-[64px]' src={logo} width={64} height={64}></Image>
-                        </Link>
                     </div>
                     <div>
                         <button onClick={logoutUser} className='rounded-full hidden lg:block bg-white border border-error text-error px-2 py-1 md:px-4 md:py-2 text-xxs whitespace-nowrap md:text-sm font-medium'>
