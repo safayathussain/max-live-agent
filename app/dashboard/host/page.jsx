@@ -26,8 +26,8 @@ const page = () => {
     useEffect(() => {
         const loadData = async () => {
             const d = await FetchApi({ url: '/agency/getAllPendingHostHandler', method: 'put', data: { role: 'AG' }, token: authState.user.sanitizedUser.accessToken })
-            setdata(d.data.filter(obj => obj.agencyId === auth.agencyId))
-
+            // setdata(d?.hosts?.filter(obj => obj.agencyId === auth.agencyId))
+            console.log(d.hosts)
         }
         loadData()
     }, [])

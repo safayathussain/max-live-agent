@@ -39,6 +39,7 @@ const Page = () => {
     presentAddress: authData.presentAddress || '',
     permanentAddress: authData.permanentAddress || '',
     agencyId: authData.agencyId || '',
+    _id: authData._id || '',
     userId: authData.userId || '',
   });
 
@@ -81,7 +82,7 @@ const Page = () => {
                 {Object.keys(profileData).map((key) => (
                    <div className="relative w-full" key={key}>
                    <TextInput
-                     label={capitalizeAllWords(key.replace(/([A-Z])/g, ' $1').trim())}
+                     label={capitalizeAllWords(key.replace(/([A-Z])/g, ' $1').trim().replace('_', ''))}
                      value={profileData[key]}
                      name={key}
                      id={`id${key}`}

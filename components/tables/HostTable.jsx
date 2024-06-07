@@ -22,16 +22,16 @@ export default function HostTable() {
     const [itemsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
     const [actionModalOpen, setActionModalOpen] = useState(false)
+    const [selectedUser, setselectedUser] = useState({})
+    const [refetch, setrefetch] = useState(0)
     const auth = getAuth()
     const loadData = async () => {
         const { data } = await FetchApi({ url: `/agency/hosts?agencyId=${auth.agencyId}` })
-        console.log(data)
         setUsers(data?.hosts)
-    console.log(data)    
     }
     useEffect(() => {
         loadData()
-    }, [])
+    }, [refetch])
     let searchedUsers = users?.filter((user) =>
         user._id.includes(searchTerm)
     );
@@ -83,6 +83,33 @@ export default function HostTable() {
     //  handle functions
     const handleSend = () => {
         console.log('hi')
+    }
+    const handleBlockHost = async () => {
+        await FetchApi({
+            url: 'agency/declined', method: 'post', isToast: true, data: {
+                adminId: auth.userId,
+                hostId: selectedUser._id
+            },
+            callback: () => {
+                setrefetch(Math.random())
+                setActionModalOpen(false)
+            }
+        },
+        )
+    }
+    const handleUnblockHost = async () => {
+        await FetchApi({
+            url: 'agency/unblock-host', method: 'put', isToast: true, data: {
+                adminId: auth.userId,
+                hostId: selectedUser._id
+            },
+            callback: () => {
+                setrefetch(Math.random())
+                setActionModalOpen(false)
+            }
+        },
+        )
+
     }
     return (
         <div className=" overflow-hidden mx-8">
@@ -238,6 +265,27 @@ export default function HostTable() {
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("date")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Block
+                                    <svg
+                                        width="15"
+                                        height="10"
+                                        viewBox="0 0 9 5"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="ml-1"
+                                    >
+                                        <path
+                                            d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
+                                            fill="#B5BFC9"
+                                        />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
                             >
                                 <span className=" flex items-center text-center font-medium">
                                     Action
@@ -249,7 +297,7 @@ export default function HostTable() {
                     </thead>
                     <tbody>
                         {currentUsers.map((user, i) => (
-                            <tr key={user._id} className="border-b whitespace-nowrap">
+                            <tr key={user._id} className="border-b whitespace-nowrap" onClick={() => setselectedUser(user)}>
                                 <td className="px-4 py-4">{i + 1}</td>
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
                                     {user.firstName + ' ' + user.lastName}
@@ -258,6 +306,11 @@ export default function HostTable() {
                                 <td className="px-4 py-4">{user._id}</td>
                                 <td className="px-4 py-4">{user.email}</td>
                                 <td className="px-4 py-4">{user.hostType}</td>
+                                <td className="px-4 py-4">{user.isBlock ? (
+                                    <span className="text-gray-100 bg-error px-2 py-1 rounded-full">Yes</span>
+                                ) : (
+                                    <span className="text-gray-100 bg-green-400 px-2 py-1 rounded-full">No</span>
+                                )}</td>
                                 <td className="px-4 py-4 font-extrabold text-xl cursor-pointer" onClick={() => setActionModalOpen(true)}>...</td>
 
                             </tr>
@@ -322,6 +375,7 @@ export default function HostTable() {
                                     }
                                     <span
                                         className={`py-2 px-4  bg-white text-gray-700 text-xs sm:text-sm hover:bg-gray-100 focus:outline-none cursor-not-allowed`}
+
                                     >
                                         ...
                                     </span>
@@ -391,32 +445,11 @@ export default function HostTable() {
                         <div className="">
                             <p className="text-xl font-bold text-[#5C2D95] mb-5">Host</p>
                             <div className="relative w-full">
-                                <input
-                                    type="number"
-                                    id="coinField"
-                                    className="block font-medium focus:border-lightGray text-black px-2.5 pb-2 pt-3 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
-                                    placeholder=" "
-                                />
-                                <label
-                                    htmlhtmlFor="coinField"
-                                    className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                                >
-                                    Coin Exchange
-                                </label>
+                                <TextInput type="number" name={'coin'} placeholder={'Coin exchange'} />
                             </div>
                             <div className="relative w-full mt-3">
-                                <input
-                                    type="number"
-                                    id="beanField"
-                                    className="block font-medium focus:border-lightGray text-black px-2.5 pb-2 pt-3 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
-                                    placeholder=" "
-                                />
-                                <label
-                                    htmlhtmlFor="beanField"
-                                    className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                                >
-                                    Bean Exchange
-                                </label>
+                                <TextInput type="number" name={'bean'} placeholder={'Bean exchange'} />
+
                             </div>
                             <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold" onClick={() => {
                                 setConfNextFunc(() => handleSend)
@@ -426,12 +459,18 @@ export default function HostTable() {
                                 Send
                             </button>
                             <div className="flex items-center gap-2">
-                                <button className=" bg-lightPink mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                    Block
-                                </button>
-                                <button className=" bg-error mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                {
+                                    !selectedUser.isBlock ?
+                                        <button onClick={handleBlockHost} className=" bg-lightPink mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                            Block
+                                        </button> :
+                                        <button onClick={handleUnblockHost} className=" bg-green-400 mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                            Unblock
+                                        </button>
+                                }
+                                {/* <button className=" bg-error mt-2 w-full py-2 rounded-lg text-white font-semibold">
                                     Delete
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
