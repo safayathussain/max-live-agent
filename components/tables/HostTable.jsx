@@ -337,7 +337,7 @@ export default function HostTable() {
                                 <td className="px-4 py-4">{user.isBlock ? (
                                     <span className="text-gray-100 bg-error px-2 py-1 rounded-full">Yes</span>
                                 ) : (
-                                    <span className="text-gray-100 bg-green-400 px-2 py-1 rounded-full">No</span>
+                                    <span className="text-gray-100 bg-success px-2 py-1 rounded-full">No</span>
                                 )}</td>
                                 <td className="px-4 py-4 font-extrabold text-xl cursor-pointer" onClick={() => setActionModalOpen(true)}>...</td>
 
@@ -490,7 +490,7 @@ export default function HostTable() {
                                         <button onClick={handleBlockHost} className=" bg-lightPink mt-2 w-full py-2 rounded-lg text-white font-semibold">
                                             Block
                                         </button> :
-                                        <button onClick={handleUnblockHost} className=" bg-green-400 mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                        <button onClick={handleUnblockHost} className=" bg-success mt-2 w-full py-2 rounded-lg text-white font-semibold">
                                             Unblock
                                         </button>
                                 }

@@ -67,7 +67,7 @@ const page = ({ query }) => {
               {/* <button className=" bg-red-600 w-[50%] px-5 py-2 rounded-lg text-white font-semibold">
                   Decline
                 </button> */}
-              <button onClick={handleAcceptHost} className=" bg-green-600 w-[50%] px-5 py-2 rounded-lg text-white font-semibold">
+              <button onClick={handleAcceptHost} className=" bg-success w-[50%] px-5 py-2 rounded-lg text-white font-semibold">
                 Accept
               </button>
 

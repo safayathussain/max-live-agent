@@ -22,7 +22,7 @@ const ConfirmModal = ({ title, open, setOpen, nextFunc = () => { } }) => {
                         <button onClick={() => {
                             nextFunc()
                             setOpen(false)
-                        }} className='py-1.5 w-full rounded-lg text-white bg-green-500'>Confirm</button>
+                        }} className='py-1.5 w-full rounded-lg text-white bg-success'>Confirm</button>
                     </div>
                 </form>
             </Modal>
