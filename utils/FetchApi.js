@@ -29,7 +29,9 @@ export const FetchApi = async ({
             response = await instance.post(url, data);
         } else if (method === 'put') {
             response = await instance.put(url, data);
-        } else if (method === 'delete') {
+        } else if (method === 'patch') {
+            response = await instance.patch(url, data);
+        }else if (method === 'delete') {
             response = await instance.delete(url);
         } else {
             throw new Error('Invalid HTTP method');

@@ -85,6 +85,7 @@ const Page = () => {
                      label={capitalizeAllWords(key.replace(/([A-Z])/g, ' $1').trim().replace('_', ''))}
                      value={profileData[key]}
                      name={key}
+                     className={'w-full'}
                      id={`id${key}`}
                      onChange={handleChange}
                      disabled={['email', 'agencyId', 'userId'].includes(key)}
