@@ -7,6 +7,7 @@ import ConfirmModal from "../ConfirmModal";
 import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
 import { getAuth } from "@/utils/functions";
+import SelectInput from "../SelectInput";
 export default function HostTable() {
 
     // confirm modal
@@ -84,15 +85,16 @@ export default function HostTable() {
         setConfNextFunc(() => nextFunc)
         setConfModalTitle(`Are you sure to ${title}`);
         setconfModalOpen(true)
-      }
+    }
     //  handle functions
-    const handleSendBeans = async (e) => {
+    const handleSendAssets = async (e) => {
         e.preventDefault()
         await FetchApi({
             url: 'bean/send-beans-to-host', method: 'patch', isToast: true, data: {
                 agencyId: auth._id,
                 hostId: selectedUser._id,
-                amount: Number(e.target.bean.value)
+                amount: Number(e.target.amount.value),
+                assetType: e.target.type.value
             },
             callback: () => {
                 setrefetch(Math.random())
@@ -472,14 +474,28 @@ export default function HostTable() {
                     <div className="px-7 py-9 bg-white rounded-md  max-w-[400px] w-full  border-4 border-primary">
                         <div className="">
                             <p className="text-xl font-bold text-[#5C2D95] mb-5">Host</p>
-                            <form onSubmit={handleSendBeans}>
-                                {/* <div className="relative w-full">
-                                    <TextInput type="number" name={'coin'} placeholder={'Coin exchange'} />
-                                </div> */}
+                            <form onSubmit={handleSendAssets}>
                                 <div className="relative w-full mt-3">
-                                    <TextInput type="number" name={'bean'} placeholder={'Bean exchange'} />
-
+                                    <TextInput type="number" name={'amount'} placeholder={'Amount'} />
                                 </div>
+                                <SelectInput className={'mt-3'} placeholder={'Type'} name={'type'} options={[
+                                    {
+                                        name: 'Bean',
+                                        value: 'beans'
+                                    },
+                                    {
+                                        name: 'Coin',
+                                        value: 'coins'
+                                    },
+                                    {
+                                        name: 'Diamond',
+                                        value: 'diamonds'
+                                    },
+                                    {
+                                        name: 'Star',
+                                        value: 'stars'
+                                    },
+                                ]} />
                                 <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold">
                                     Send
                                 </button>
