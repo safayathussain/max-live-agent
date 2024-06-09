@@ -16,13 +16,15 @@ module.exports = {
         'error': '#F4828F',
         'silver': '#EEF0F6',
         'lightPink': '#EE6093',
-       },
-     fontSize: {
-      'xxs': '9px'
-     },
-     backgroundImage: {
-      'gradiantBg': 'linear-gradient(180deg, #D6F0FE 0%, #F5DBFD 100%)',
-    },
+        'success': '#04b045',
+        'warning': '#e4a11b'
+      },
+      fontSize: {
+        'xxs': '9px'
+      },
+      backgroundImage: {
+        'gradiantBg': 'linear-gradient(180deg, #D6F0FE 0%, #F5DBFD 100%)',
+      },
     },
   },
   plugins: [require('flowbite/plugin')],
