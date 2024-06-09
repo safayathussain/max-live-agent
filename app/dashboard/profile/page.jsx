@@ -36,8 +36,16 @@ const Page = () => {
     agencyName: authData.agencyName || '',
     email: authData.email || '',
     phone: authData.phone || '',
+    country : authData.country || '',
     presentAddress: authData.presentAddress || '',
     permanentAddress: authData.permanentAddress || '',
+    vipStatus : authData.vipStatus || false,
+    vipLevel : authData.vipLevel || 0,
+    beans : authData.beans || 0,
+    coins : authData.coins || 0,
+    diamonds : authData.diamonds || 0,
+    stars : authData.stars || 0,
+    _id: authData._id || '',
     agencyId: authData.agencyId || '',
     userId: authData.userId || '',
   });
@@ -58,7 +66,7 @@ const Page = () => {
   return (
     <div>
       <form onSubmit={handleSubmit} ref={formRef}>
-        <div className="bg-white w-full min-h-[calc(100vh-200px)] flex items-center justify-center rounded-lg">
+        <div className="bg-white py-12 w-full min-h-[calc(100vh-200px)] flex items-center justify-center rounded-lg">
           <div className="flex justify-center px-8 py-10 sm:py-4">
             <div className="flex flex-col items-center gap-3">
               <p className="text-xl text-grayColor">Your Profile</p>
@@ -86,7 +94,7 @@ const Page = () => {
                      name={key}
                      id={`id${key}`}
                      onChange={handleChange}
-                     disabled={['email', 'agencyId', 'userId'].includes(key)}
+                     disabled={!['agencyHolderName', 'agencyName', 'phone', 'presentAddress', 'permanentAddress'].includes(key)}
                    />
                  </div>
                 ))}
