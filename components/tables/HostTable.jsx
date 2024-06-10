@@ -8,7 +8,12 @@ import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
 import { getAuth } from "@/utils/functions";
 import SelectInput from "../SelectInput";
-export default function HostTable() {
+import AcceptHostModal from "../AcceptHostModal";
+import { useSelector } from "react-redux";
+import { SortIcon } from "../combinedComponents";
+import { IoEye } from "react-icons/io5";
+import { CgEye } from "react-icons/cg";
+export default function HostTable({ type }) {
 
     // confirm modal
     const [confModalOpen, setconfModalOpen] = useState(false)
@@ -25,10 +30,16 @@ export default function HostTable() {
     const [actionModalOpen, setActionModalOpen] = useState(false)
     const [selectedUser, setselectedUser] = useState({})
     const [refetch, setrefetch] = useState(0)
+    const authState = useSelector(state => state.auth)
     const auth = getAuth()
     const loadData = async () => {
-        const { data } = await FetchApi({ url: `/agency/hosts?agencyId=${auth.agencyId}` })
-        setUsers(data?.hosts)
+        if (type === 'hosts') {
+            const { data } = await FetchApi({ url: `/agency/hosts?agencyId=${auth.agencyId}` })
+            setUsers(data?.hosts)
+        } else if (type === 'requests') {
+            const d = await FetchApi({ url: '/agency/getAllPendingHostHandler', method: 'put', data: { role: 'AG' }, token: authState?.user?.sanitizedUser?.accessToken })
+            setUsers(d?.data?.filter(obj => obj.agencyId === auth.agencyId))
+        }
     }
     useEffect(() => {
         loadData()
@@ -153,7 +164,7 @@ export default function HostTable() {
                 </div>
             </div>
             <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left text-gray-500 ">
+                <table className="w-full text-sm text-left text-gray-500 whitespace-nowrap ">
                     <thead className="text-xs text-lightGray uppercase  bg-white">
                         <tr>
                             {/* <th className="pl-4 py-3 cursor-pointer">
@@ -161,24 +172,12 @@ export default function HostTable() {
                   </th> */}
                             <th
                                 className="px-4 py-3 cursor-pointer "
-                                onClick={() => handleSort("sl")}
+                                onClick={() => handleSort("hostId")}
                             >
                                 <div>
                                     <span className=" flex items-center font-medium">
-                                        Sl
-                                        <svg
-                                            width="15"
-                                            height="10"
-                                            viewBox="0 0 9 5"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="ml-1"
-                                        >
-                                            <path
-                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                                fill="#B5BFC9"
-                                            />
-                                        </svg>
+                                        host id
+                                        <SortIcon />
                                     </span>
                                 </div>
                             </th>
@@ -189,129 +188,111 @@ export default function HostTable() {
                                 <div>
                                     <span className=" flex items-center font-medium">
                                         Full Name
-                                        <svg
-                                            width="15"
-                                            height="10"
-                                            viewBox="0 0 9 5"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="ml-1"
-                                        >
-                                            <path
-                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                                fill="#B5BFC9"
-                                            />
-                                        </svg>
+                                        <SortIcon />
                                     </span>
                                 </div>
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer "
-                                onClick={() => handleSort("fullName")}
+                                onClick={() => handleSort("_id")}
                             >
                                 <div>
                                     <span className=" flex items-center font-medium">
-                                        host id
-                                        <svg
-                                            width="15"
-                                            height="10"
-                                            viewBox="0 0 9 5"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="ml-1"
-                                        >
-                                            <path
-                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                                fill="#B5BFC9"
-                                            />
-                                        </svg>
+                                        user id
+                                        <SortIcon />
                                     </span>
                                 </div>
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer "
-                                onClick={() => handleSort("fullName")}
-                            >
-                                <div>
-                                    <span className=" flex items-center font-medium">
-                                        user Id
-                                        <svg
-                                            width="15"
-                                            height="10"
-                                            viewBox="0 0 9 5"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="ml-1"
-                                        >
-                                            <path
-                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                                fill="#B5BFC9"
-                                            />
-                                        </svg>
-                                    </span>
-                                </div>
-                            </th>
-                            <th
-                                className="px-4 py-3 cursor-pointer"
                                 onClick={() => handleSort("email")}
                             >
-                                <span className=" flex items-center font-medium">
-                                    Email Address
-                                    <svg
-                                        width="15"
-                                        height="10"
-                                        viewBox="0 0 9 5"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ml-1"
-                                    >
-                                        <path
-                                            d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                            fill="#B5BFC9"
-                                        />
-                                    </svg>
-                                </span>
+                                <div>
+                                    <span className=" flex items-center font-medium">
+                                        Email
+                                        <SortIcon />
+                                    </span>
+                                </div>
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer"
-                                onClick={() => handleSort("date")}
+                                onClick={() => handleSort("hostType")}
                             >
                                 <span className=" flex items-center font-medium">
                                     Host type
-                                    <svg
-                                        width="15"
-                                        height="10"
-                                        viewBox="0 0 9 5"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ml-1"
-                                    >
-                                        <path
-                                            d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                            fill="#B5BFC9"
-                                        />
-                                    </svg>
+                                    <SortIcon />
                                 </span>
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer"
-                                onClick={() => handleSort("date")}
+                                onClick={() => handleSort("beans")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Beans
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("coins")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Coins
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("diamonds")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Diamonds
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("stars")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Stars
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("isBlock")}
                             >
                                 <span className=" flex items-center font-medium">
                                     Block
-                                    <svg
-                                        width="15"
-                                        height="10"
-                                        viewBox="0 0 9 5"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="ml-1"
-                                    >
-                                        <path
-                                            d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
-                                            fill="#B5BFC9"
-                                        />
-                                    </svg>
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("isVerified")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Verified
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("vipStatus")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Vip status
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("vipLevel")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Vip level
+                                    <SortIcon />
                                 </span>
                             </th>
                             <th
@@ -319,7 +300,6 @@ export default function HostTable() {
                             >
                                 <span className=" flex items-center text-center font-medium">
                                     Action
-
                                 </span>
                             </th>
 
@@ -328,19 +308,36 @@ export default function HostTable() {
                     <tbody>
                         {currentUsers.map((user, i) => (
                             <tr key={user._id} className="border-b whitespace-nowrap" onClick={() => setselectedUser(user)}>
-                                <td className="px-4 py-4">{i + 1}</td>
-                                <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
-                                    {user.firstName + ' ' + user.lastName}
-                                </td>
                                 <td className="px-4 py-4">{user.hostId}</td>
+
+                                <td onClick={() => setOpen(true)} className="px-4 py-4 flex items-center gap-2 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
+                                    {user.firstName + ' ' + user.lastName} <CgEye size={18} color="#D5ADF6"/> 
+                                </td>
                                 <td className="px-4 py-4">{user._id}</td>
                                 <td className="px-4 py-4">{user.email}</td>
                                 <td className="px-4 py-4">{user.hostType}</td>
+
+                                <td className="px-4 py-4">{user.beans || 0}</td>
+                                <td className="px-4 py-4">{user.diamonds || 0}</td>
+                                <td className="px-4 py-4">{user.coins || 0}</td>
+                                <td className="px-4 py-4">{user.stars || 0}</td>
                                 <td className="px-4 py-4">{user.isBlock ? (
                                     <span className="text-gray-100 bg-error px-2 py-1 rounded-full">Yes</span>
                                 ) : (
                                     <span className="text-gray-100 bg-success px-2 py-1 rounded-full">No</span>
                                 )}</td>
+                                <td className="px-4 py-4">{user.isVerified ? (
+                                    <span className="text-gray-100 bg-success px-2 py-1 rounded-full">Yes</span>
+                                ) : (
+                                    <span className="text-gray-100 bg-error px-2 py-1 rounded-full">No</span>
+                                )}</td>
+                                <td className="px-4 py-4">{user.vipStatus ? (
+                                    <span className="text-gray-100 bg-success px-2 py-1 rounded-full">Yes</span>
+                                ) : (
+                                    <span className="text-gray-100 bg-error px-2 py-1 rounded-full">No</span>
+                                )}</td>
+                                <td className="px-4 py-4">{user.vipLevel || 0}</td>
+
                                 <td className="px-4 py-4 font-extrabold text-xl cursor-pointer" onClick={() => setActionModalOpen(true)}>...</td>
 
                             </tr>
@@ -472,49 +469,53 @@ export default function HostTable() {
             <Modal open={actionModalOpen} >
                 <div ref={ref} className=''>
                     <div className="px-7 py-9 bg-white rounded-md  max-w-[400px] w-full  border-4 border-primary">
-                        <div className="">
-                            <p className="text-xl font-bold text-[#5C2D95] mb-5">Host</p>
-                            <form onSubmit={handleSendAssets}>
-                                <div className="relative w-full mt-3">
-                                    <TextInput type="number" name={'amount'} placeholder={'Amount'} />
-                                </div>
-                                <SelectInput className={'mt-3'} placeholder={'Type'} name={'type'} options={[
-                                    {
-                                        name: 'Bean',
-                                        value: 'beans'
-                                    },
-                                    {
-                                        name: 'Coin',
-                                        value: 'coins'
-                                    },
-                                    {
-                                        name: 'Diamond',
-                                        value: 'diamonds'
-                                    },
-                                    {
-                                        name: 'Star',
-                                        value: 'stars'
-                                    },
-                                ]} />
-                                <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                    Send
-                                </button>
-                            </form>
-                            <div className="flex items-center gap-2">
-                                {
-                                    !selectedUser.isBlock ?
-                                        <button onClick={handleBlockHost} className=" bg-lightPink mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                            Block
-                                        </button> :
-                                        <button onClick={handleUnblockHost} className=" bg-success mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                            Unblock
+                        {
+                            type === 'hosts' ?
+                                <div className="">
+                                    <p className="text-xl font-bold text-[#5C2D95] mb-5">Host</p>
+                                    <form onSubmit={handleSendAssets}>
+                                        <div className="relative w-full mt-3">
+                                            <TextInput type="number" name={'amount'} placeholder={'Amount'} />
+                                        </div>
+                                        <SelectInput className={'mt-3'} placeholder={'Type'} name={'type'} options={[
+                                            {
+                                                name: 'Bean',
+                                                value: 'beans'
+                                            },
+                                            {
+                                                name: 'Coin',
+                                                value: 'coins'
+                                            },
+                                            {
+                                                name: 'Diamond',
+                                                value: 'diamonds'
+                                            },
+                                            {
+                                                name: 'Star',
+                                                value: 'stars'
+                                            },
+                                        ]} />
+                                        <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                            Send
                                         </button>
-                                }
-                                <button onClick={() => handleActions(handleDeleteHost, 'delete this host?')} className=" bg-error mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
+                                    </form>
+                                    <div className="flex items-center gap-2">
+                                        {
+                                            !selectedUser.isBlock ?
+                                                <button onClick={handleBlockHost} className=" bg-lightPink mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                                    Block
+                                                </button> :
+                                                <button onClick={handleUnblockHost} className=" bg-success mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                                    Unblock
+                                                </button>
+                                        }
+                                        <button onClick={() => handleActions(handleDeleteHost, 'delete this host?')} className=" bg-error mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div> : type === 'requests' && <AcceptHostModal host={selectedUser} handleActions={handleActions} />
+                        }
+
                     </div>
 
                 </div>

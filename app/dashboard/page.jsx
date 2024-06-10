@@ -56,10 +56,10 @@ const page = () => {
           </div>)
         }
       </div>
-      {/* <p className="text-xl text-[#5C2D95] font-bold my-8">
+      <p className="text-xl text-[#5C2D95] font-bold my-8">
         Settings
       </p>
-      <SettingCard/> */}
+      <SettingCard/>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import logo from '@/public/logo.svg'
 import '@/app/dashboard/prime-react.css'
 import TextInput from '@/components/TextInput';
+import SelectInput from './SelectInput'
 
 const SettingCard = () => {
     const [showUploadField, setShowUploadField] = useState(false)
@@ -40,7 +41,20 @@ const SettingCard = () => {
                     <TextInput label={'Agency Name'} name={'Search'} id={'idSearch'} />
                 </div>
                 <div className="relative w-full">
-                    <TextInput label={'Country Name'} name={'Search'} id={'idSearch'} />
+                    <SelectInput options={[
+                        {
+                            name: 'Bangladesh',
+                            value: 'BD'
+                        },
+                        {
+                            name: 'India',
+                            value: 'IND'
+                        },
+                        {
+                            name: 'Pakistan',
+                            value: 'PAK'
+                        },
+                    ]} label={'Country Name'} name={'Search'} id={'idSearch'} />
                 </div>
                 <button type="submit" className='px-4 py-1 rounded-md bg-[#F5AAE9] text-base font-medium text-white w-max'>
                     Save
