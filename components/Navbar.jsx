@@ -17,7 +17,7 @@ const Navbar = () => {
     return (
         <div className='lg:ml-[255px] lg:max-w-[calc(100vw-255px)] w-full'>
             <div className='bg-primary px-1 md:px-8  lg:px-14 py-5 w-full flex justify-between items-center'>
-                <p className=' text-sm sm:text-md sm:whitespace-nowrap md:text-lg font-semibold text-white '>Max Live Agency Portal / {""}
+                <p className=' text-sm sm:text-md sm:whitespace-nowrap md:text-lg font-semibold text-white '>Max Live Agency / {""}
                     <span className={'text-white'} >{pageTitle}</span>
                 </p>
                 <div className='flex items-center gap-1 md:gap-3 min-w-[45vw] justify-end'>
