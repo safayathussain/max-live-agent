@@ -513,7 +513,7 @@ export default function HostTable({ type }) {
                                             Delete
                                         </button>
                                     </div>
-                                </div> : type === 'requests' && <AcceptHostModal host={selectedUser} handleActions={handleActions} />
+                                </div> : type === 'requests' && <AcceptHostModal handleBlockHost={handleBlockHost}  host={selectedUser} handleActions={handleActions} />
                         }
 
                     </div>
