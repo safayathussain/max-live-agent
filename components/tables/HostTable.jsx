@@ -36,7 +36,7 @@ export default function HostTable({ type }) {
         } else if (type === 'requests') {
             const d = await FetchApi({ url: '/agency/getAllPendingHostHandler', method: 'put', data: { role: 'AG' }})
             console.log(d)
-            if(d.data){
+            if(Array.isArray(d.data)){
                 setUsers(d?.data?.filter(obj => obj.agencyId === auth.agencyId))
             }else{
                 setUsers([])
@@ -516,7 +516,7 @@ export default function HostTable({ type }) {
                                             Delete
                                         </button>
                                     </div>
-                                </div> : type === 'requests' && <AcceptHostModal handleBlockHost={handleBlockHost}  host={selectedUser} handleActions={handleActions} />
+                                </div> : type === 'requests' && <AcceptHostModal setActionModalOpen={setActionModalOpen} refetch={() => setrefetch(Math.random())} handleBlockHost={handleBlockHost}  host={selectedUser} handleActions={handleActions} />
                         }
 
                     </div>

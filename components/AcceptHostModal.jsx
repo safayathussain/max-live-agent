@@ -2,9 +2,12 @@
 import { FetchApi } from '@/utils/FetchApi'
 import React from 'react'
 
-const AcceptHostModal = ({ handleActions, host, handleBlockHost }) => {
+const AcceptHostModal = ({ handleActions, host, handleBlockHost, refetch, setActionModalOpen }) => {
     const handleAcceptHost = async () => {
-        const d = await FetchApi({ url: `/agency/approveHostHandler/${host._id}`, method: 'post', data: { role: 'AG' }, callback: () => { toast.success('Host approved successfully') } })
+        const d = await FetchApi({ url: `/agency/approveHostHandler/${host._id}`, method: 'post', data: { role: 'AG' },isToast: true, callback: () => {
+            refetch()
+            setActionModalOpen(false)
+        }  })
     }
     return (
         <div>
