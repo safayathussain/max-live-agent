@@ -35,9 +35,9 @@ export default function HostTable({ type }) {
             setUsers(data?.hosts|| [])
         } else if (type === 'requests') {
             const d = await FetchApi({ url: '/agency/getAllPendingHostHandler', method: 'put', data: { role: 'AG' }})
-            if(d.data.data){
-                console.log(d)
-                setUsers(d?.data?.data?.filter(obj => obj.agencyId === auth.agencyId))
+            console.log(d)
+            if(d.data){
+                setUsers(d?.data?.filter(obj => obj.agencyId === auth.agencyId))
             }else{
                 setUsers([])
             }
@@ -313,7 +313,8 @@ export default function HostTable({ type }) {
                                 <td className="px-4 py-4">{user.hostId}</td>
 
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 flex items-center gap-2 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
-                                    {user.firstName + ' ' + user.lastName} <CgEye size={18} color="#D5ADF6"/> 
+                                    {user.firstName + ' ' + user.lastName} 
+                                    {/* <CgEye size={18} color="#D5ADF6"/>  */}
                                 </td>
                                 <td className="px-4 py-4">{user._id}</td>
                                 <td className="px-4 py-4">{user.email}</td>
