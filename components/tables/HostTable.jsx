@@ -6,12 +6,10 @@ import Modal from "@/components/Modal";
 import ConfirmModal from "../ConfirmModal";
 import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
-import { getAuth } from "@/utils/functions";
+import { getAuth, useAuth } from "@/utils/functions";
 import SelectInput from "../SelectInput";
 import AcceptHostModal from "../AcceptHostModal";
-import { useSelector } from "react-redux";
 import { SortIcon } from "../combinedComponents";
-import { IoEye } from "react-icons/io5";
 import { CgEye } from "react-icons/cg";
 export default function HostTable({ type }) {
 
@@ -30,15 +28,19 @@ export default function HostTable({ type }) {
     const [actionModalOpen, setActionModalOpen] = useState(false)
     const [selectedUser, setselectedUser] = useState({})
     const [refetch, setrefetch] = useState(0)
-    const authState = useSelector(state => state.auth)
-    const auth = getAuth()
+    const {auth, token} = useAuth()
     const loadData = async () => {
         if (type === 'hosts') {
             const { data } = await FetchApi({ url: `/agency/hosts?agencyId=${auth.agencyId}` })
-            setUsers(data?.hosts)
+            setUsers(data?.hosts|| [])
         } else if (type === 'requests') {
-            const d = await FetchApi({ url: '/agency/getAllPendingHostHandler', method: 'put', data: { role: 'AG' }, token: authState?.user?.sanitizedUser?.accessToken })
-            setUsers(d?.data?.filter(obj => obj.agencyId === auth.agencyId))
+            const d = await FetchApi({ url: '/agency/getAllPendingHostHandler', method: 'put', data: { role: 'AG' }})
+            if(d.data.data){
+                console.log(d)
+                setUsers(d?.data?.data?.filter(obj => obj.agencyId === auth.agencyId))
+            }else{
+                setUsers([])
+            }
         }
     }
     useEffect(() => {

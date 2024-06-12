@@ -4,29 +4,18 @@ import logo from '@/public/logo.svg'
 import Link from 'next/link';
 import { useState, useRef } from 'react';
 import TextInput from '@/components/TextInput';
-import { capitalizeAllWords, getAuth } from '@/utils/functions';
-import toast from 'react-hot-toast';
-import { setAuth } from '@/redux/slices/AuthSlice';
+import { capitalizeAllWords, getAuth, useAuth } from '@/utils/functions';
 import { FetchApi } from '@/utils/FetchApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { store } from '@/redux/store';
 import { FileUpload } from 'primereact/fileupload';
 
 const Page = () => {
-  const dispatch = useDispatch()
-  const authData = getAuth();
-  const authState = useSelector(state => state.auth.user)
+  const { auth: authData, refetchAuth } = useAuth();
   const updateUser = async (body) => {
-    const response = await FetchApi({ url: `/agency/${authData._id}`, method: 'put', data: body, callback: () => {
-      toast.success('Profile updated successfully')
-    }});
-    console.log(response.data)
-    console.log(authState)
-    const newUser = {
-      ...authState,
-      agency: response.data.editAgency
-    }
-    dispatch(setAuth(newUser))
+    await FetchApi({
+      url: `/agency/${authData._id}`, method: 'put', isToast: true, data: body, callback: () => {
+        refetchAuth()
+      }
+    });
   }
 
   const [showUploadField, setShowUploadField] = useState(false);
@@ -37,15 +26,15 @@ const Page = () => {
     agencyName: authData.agencyName || '',
     email: authData.email || '',
     phone: authData.phone || '',
-    country : authData.country || '',
+    country: authData.country || '',
     presentAddress: authData.presentAddress || '',
     permanentAddress: authData.permanentAddress || '',
-    vipStatus : authData.vipStatus || false,
-    vipLevel : authData.vipLevel || 0,
-    beans : authData.beans || 0,
-    coins : authData.coins || 0,
-    diamonds : authData.diamonds || 0,
-    stars : authData.stars || 0,
+    vipStatus: authData.vipStatus || false,
+    vipLevel: authData.vipLevel || 0,
+    beans: authData.beans || 0,
+    coins: authData.coins || 0,
+    diamonds: authData.diamonds || 0,
+    stars: authData.stars || 0,
     _id: authData._id || '',
     agencyId: authData.agencyId || '',
     _id: authData._id || '',
@@ -89,24 +78,24 @@ const Page = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 sm:min-w-[380px] w-full mt-4 gap-4">
                 {Object.keys(profileData).map((key) => (
-                   <div className="relative w-full" key={key}>
-                   <TextInput
-                     label={capitalizeAllWords(key.replace(/([A-Z])/g, ' $1').trim().replace('_', ''))}
-                     value={profileData[key]}
-                     name={key}
-                     className={'w-full'}
-                     id={`id${key}`}
-                     onChange={handleChange}
-                     disabled={!['agencyHolderName', 'agencyName', 'phone', 'presentAddress', 'permanentAddress'].includes(key)}
-                   />
-                 </div>
+                  <div className="relative w-full" key={key}>
+                    <TextInput
+                      label={capitalizeAllWords(key.replace(/([A-Z])/g, ' $1').trim().replace('_', ''))}
+                      value={profileData[key]}
+                      name={key}
+                      className={'w-full'}
+                      id={`id${key}`}
+                      onChange={handleChange}
+                      disabled={!['agencyHolderName', 'agencyName', 'phone', 'presentAddress', 'permanentAddress'].includes(key)}
+                    />
+                  </div>
                 ))}
               </div>
               <div className="mt-3 max-w-[350px] w-full flex justify-center items-center">
-                  <button type='submit' className="whitespace-nowrap bg-primary px-8 py-2 rounded-lg text-white font-semibold">
-                    Save Changes
-                  </button>
-                </div>
+                <button type='submit' className="whitespace-nowrap bg-primary px-8 py-2 rounded-lg text-white font-semibold">
+                  Save Changes
+                </button>
+              </div>
             </div>
           </div>
         </div>

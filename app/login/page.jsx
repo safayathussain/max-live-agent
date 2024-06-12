@@ -2,19 +2,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from '@/public/logo.svg'
-import { useDispatch, useSelector } from "react-redux";
-import { setAuth } from "@/redux/slices/AuthSlice";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getAuth, loginUser } from "@/utils/functions";
+import {  loginUser, useAuth } from "@/utils/functions";
 import TextInput from "@/components/TextInput";
 
 
 const page = () => {
 
   const router = useRouter()
-  const auth = getAuth()
-  console.log(auth)
+  const {auth} = useAuth()
   if (auth?.role === 'AG') return router.push('/dashboard/')
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +27,7 @@ const page = () => {
           <Image src={logo}></Image>
         </div>
         <div className="text-center">
-          <p className="text-xl font-semibold text-[#5C2D95]">Please Login</p>
+          <p className="text-xl font-semibold text-[#5C2D95]">Agency Login</p>
         </div>
         <div className="flex flex-col max-w-[350px] w-full mt-8 gap-2">
           {/* email */}

@@ -2,6 +2,7 @@ import { store } from "@/redux/store";
 import { FetchApi } from "./FetchApi";
 import { setAuth } from "@/redux/slices/AuthSlice";
 import { jwtDecode } from "jwt-decode";
+import { useSelector } from "react-redux";
 
 export function capitalizeAllWords(str) {
   const words = str.split(' ');
@@ -30,7 +31,6 @@ export const loginUser = async (email, password, func) => {
   const res = await FetchApi({ url: '/agency/agencySignin', method: 'post', data: { email, password }, callback: func })
   console.log(res)
   if (res.status === 200) {
-    console.log(res?.data.user)
     store.dispatch(setAuth(res?.data.user))
 
   }
@@ -45,3 +45,30 @@ export const logoutUser = () => {
 }
 
 
+const refetchAuthState = async (auth) => {
+  try {
+    const res = await FetchApi({
+      url: `/agency/detailsAgency/${auth.agency._id}`, callback: () => {
+      }
+    })
+    if (res.status === 200) {
+      const newObj = {
+        ...auth,
+        agency: res.data.agency,
+      }
+      store.dispatch(setAuth(newObj))
+    }
+  } catch (error) {
+    store.dispatch(setAuth({}))
+    window.location = '/login'
+  }
+}
+
+export const useAuth = () => {
+  const auth = useSelector((state) => state.auth.user);
+  return {
+    auth: auth?.agency,
+    refetchAuth: () => refetchAuthState(auth),
+    token: auth?.sanitizedUser?.accessToken
+  }
+}

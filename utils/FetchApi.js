@@ -39,7 +39,6 @@ export const FetchApi = async ({
         callback()
         const res = { data: response?.data, status: response?.status, }
         if (isToast) {
-            console.log(res)
             toast.success(res.data.message)
         }
         return res

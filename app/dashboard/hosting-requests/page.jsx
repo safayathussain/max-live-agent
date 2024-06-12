@@ -11,7 +11,6 @@ import { useEffect } from "react";
 import { FetchApi } from "@/utils/FetchApi";
 import { getAuth } from "@/utils/functions";
 import { store } from "@/redux/store";
-import { useSelector } from "react-redux";
 
 const page = () => {
     

@@ -1,16 +1,19 @@
 'use client'
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { getAuth } from "@/utils/functions";
+import { getAuth, useAuth } from "@/utils/functions";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 const DashboardLayout = ({ children }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter()
-    const authData = getAuth()
-    if (!authData || authData.role !== 'AG') return router.push('/login')
+    const {auth, refetchAuth} = useAuth()
+    if (!auth || auth.role !== 'AG') return router.push('/login')
+        useEffect(() => {
+          refetchAuth()
+        }, [])
+        
     return (
         <div className='min-h-screen'>
             <div className='flex items-center bg-primary'>
