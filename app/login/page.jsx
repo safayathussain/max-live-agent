@@ -36,7 +36,7 @@ const page = () => {
           </div>
           {/* password */}
           <div className="relative w-full">
-          <TextInput label={'Password'} name={'password'} id={'pass'}/>
+          <TextInput label={'Password'} name={'password'} type="password" id={'pass'}/>
           </div>
           <div className="flex justify-end">
             <Link className="text-xs text-primary underline" href="/reset-password">Reset Password?</Link>
