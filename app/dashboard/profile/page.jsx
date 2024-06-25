@@ -35,6 +35,7 @@ const Page = () => {
     coins: authData.coins || 0,
     diamonds: authData.diamonds || 0,
     stars: authData.stars || 0,
+    maxId: authData.maxId || '',
     _id: authData._id || '',
     agencyId: authData.agencyId || '',
     _id: authData._id || '',
@@ -61,7 +62,7 @@ const Page = () => {
           <div className="flex justify-center px-8 py-10 sm:py-4">
             <div className="flex flex-col items-center gap-3">
               <p className="text-xl text-grayColor">Your Profile</p>
-              <div className="relative w-max">
+              {/* <div className="relative w-max">
                 <Image src={logo} alt='' className='rounded-full'></Image>
                 <button className='bg-error rounded-full flex justify-center items-center size-7 absolute right-2 top-[70%]' onClick={() => setShowUploadField(true)}>
                   <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +76,7 @@ const Page = () => {
                     showUploadField && <FileUpload mode='basic' name="demo[]" url={'/api/upload'} accept="image/*" maxFileSize={1000000} emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>} />
                   }
                 </div>
-              </div>
+              </div> */}
               <div className="grid grid-cols-1 sm:grid-cols-2 sm:min-w-[380px] w-full mt-4 gap-4">
                 {Object.keys(profileData).map((key) => (
                   <div className="relative w-full" key={key}>

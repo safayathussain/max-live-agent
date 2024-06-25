@@ -12,7 +12,7 @@ import TextInput from "@/components/TextInput";
 const page = () => {
   const router = useRouter()
   const { auth } = useAuth()
-//   if (auth?.role === 'AG') return router.push('/dashboard/user-management')
+  if (auth?.role === 'AG') return router.push('/dashboard')
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = e.target.email.value

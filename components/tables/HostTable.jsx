@@ -47,7 +47,7 @@ export default function HostTable({ type }) {
         loadData()
     }, [refetch])
     let searchedUsers = users?.filter((user) =>
-        user._id.includes(searchTerm)
+        user.maxId.includes(searchTerm)
     );
     const ref = useRef(null);
     useClickOutside(ref, () => {
@@ -105,7 +105,7 @@ export default function HostTable({ type }) {
         await FetchApi({
             url: 'bean/send-beans-to-host', method: 'patch', isToast: true, data: {
                 agencyId: auth._id,
-                hostId: selectedUser._id,
+                hostId: selectedUser.maxId,
                 amount: Number(e.target.amount.value),
                 assetType: e.target.type.value
             },
@@ -316,7 +316,7 @@ export default function HostTable({ type }) {
                                     {user.firstName + ' ' + user.lastName} 
                                     {/* <CgEye size={18} color="#D5ADF6"/>  */}
                                 </td>
-                                <td className="px-4 py-4">{user._id}</td>
+                                <td className="px-4 py-4 font-medium text-black">{user.maxId}</td>
                                 <td className="px-4 py-4">{user.email}</td>
                                 <td className="px-4 py-4">{user.hostType}</td>
 
@@ -502,20 +502,7 @@ export default function HostTable({ type }) {
                                             Send
                                         </button>
                                     </form>
-                                    <div className="flex items-center gap-2">
-                                        {
-                                            !selectedUser.isBlock ?
-                                                <button onClick={handleBlockHost} className=" bg-lightPink mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                                    Block
-                                                </button> :
-                                                <button onClick={handleUnblockHost} className=" bg-success mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                                    Unblock
-                                                </button>
-                                        }
-                                        <button onClick={() => handleActions(handleDeleteHost, 'delete this host?')} className=" bg-error mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                            Delete
-                                        </button>
-                                    </div>
+                                 
                                 </div> : type === 'requests' && <AcceptHostModal setActionModalOpen={setActionModalOpen} refetch={() => setrefetch(Math.random())} handleBlockHost={handleBlockHost}  host={selectedUser} handleActions={handleActions} />
                         }
 
