@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     user: {},
+    country: ''
 }
 
 export const authSlice = createSlice({
@@ -11,9 +12,12 @@ export const authSlice = createSlice({
         setAuth: (state, action) => {
             state.user = action.payload
         },
+        setCountry: (state, action) => {
+            state.country = action.payload
+        }
     },
 })
 
-export const {setAuth} = authSlice.actions
+export const {setAuth, setCountry} = authSlice.actions
 
 export default authSlice.reducer

@@ -6,7 +6,7 @@ import Modal from "@/components/Modal";
 import ConfirmModal from "../ConfirmModal";
 import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
-import { getAuth, useAuth } from "@/utils/functions";
+import { getAuth, getUserLevel, loadLevelData, useAuth } from "@/utils/functions";
 import SelectInput from "../SelectInput";
 import AcceptHostModal from "../AcceptHostModal";
 import { SortIcon } from "../combinedComponents";
@@ -31,6 +31,7 @@ export default function HostTable({ type }) {
     const [refetch, setrefetch] = useState(0)
     const {auth, token} = useAuth()
     const loadData = async () => {
+        await loadLevelData()
         if (type === 'hosts') {
             const { data } = await FetchApi({ url: `/agency/hosts?agencyId=${auth.agencyId}` })
             setUsers(data?.hosts|| [])
@@ -239,15 +240,6 @@ export default function HostTable({ type }) {
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer"
-                                onClick={() => handleSort("coins")}
-                            >
-                                <span className=" flex items-center font-medium">
-                                    Coins
-                                    <SortIcon />
-                                </span>
-                            </th>
-                            <th
-                                className="px-4 py-3 cursor-pointer"
                                 onClick={() => handleSort("diamonds")}
                             >
                                 <span className=" flex items-center font-medium">
@@ -257,10 +249,29 @@ export default function HostTable({ type }) {
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("coins")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Coins
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            
+                            <th
+                                className="px-4 py-3 cursor-pointer"
                                 onClick={() => handleSort("stars")}
                             >
                                 <span className=" flex items-center font-medium">
                                     Stars
+                                    <SortIcon />
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("diamonds")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Level
                                     <SortIcon />
                                 </span>
                             </th>
@@ -327,6 +338,7 @@ export default function HostTable({ type }) {
                                 <td className="px-4 py-4">{user.diamonds || 0}</td>
                                 <td className="px-4 py-4">{user.coins || 0}</td>
                                 <td className="px-4 py-4">{user.stars || 0}</td>
+                                <td className="px-4 py-4">{getUserLevel(user.diamonds).levelName}</td>
                                 <td className="px-4 py-4">{user.isBlock ? (
                                     <span className="text-gray-100 bg-error px-2 py-1 rounded-full">Yes</span>
                                 ) : (

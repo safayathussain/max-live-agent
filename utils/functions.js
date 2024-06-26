@@ -17,7 +17,6 @@ export const stringToCharCode = (entityRegex) => {
 }
 export const getAuth = () => {
   const auth = store.getState().auth?.user
-  console.log(auth)
   if (auth?.accessToken) {
     const data = jwtDecode(auth?.accessToken || '')
     return data.agency
@@ -26,6 +25,9 @@ export const getAuth = () => {
   } else {
     return {}
   }
+}
+export const getCountry = () => {
+  return store.getState().auth.country 
 }
 export const loginUser = async (email, password, func) => {
   const res = await FetchApi({ url: '/agency/agencySignin', method: 'post', data: { email, password }, callback: func })
@@ -70,5 +72,32 @@ export const useAuth = () => {
     auth: auth?.agency,
     refetchAuth: () => refetchAuthState(auth),
     token: auth?.sanitizedUser?.accessToken
+  }
+}
+
+
+
+//  for getting level
+let levelsData = {
+  result: []
+};
+export const loadLevelData = async () => {
+  const { data } = await FetchApi({ url: '/level/levels' })
+  levelsData = data
+  return levelsData.result
+}
+
+export const getUserLevel = (diamonds) => {
+  let level = {}
+  const sortedLevels = levelsData.result.sort((a, b) => a.diamonds - b.diamonds);
+  for (let i = 0; i < sortedLevels.length; i++) {
+    if (sortedLevels[i].diamonds <= diamonds) {
+      level = sortedLevels[i]
+    }
+  }
+  if(!level.levelName){
+    return {levelName: '0', diamonds: 0}
+  }else {
+    return level;
   }
 }
