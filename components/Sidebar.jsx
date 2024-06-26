@@ -210,12 +210,7 @@ const Sidebar = ({ open, setOpen }) => {
                       {item.icon}
                     </span>
                     {item.title}
-                    {
-                      item.title.includes('Requests') &&
-                      <span className="size-4 rounded-full flex items-center justify-center bg-[#FC4949] text-white text-xxs">
-                        1
-                      </span>
-                    }
+                  
                   </Link>
                 </li>
               ))}

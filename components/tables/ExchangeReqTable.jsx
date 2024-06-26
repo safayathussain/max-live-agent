@@ -5,6 +5,7 @@ import useClickOutside from "@/hooks/useClickOutside";
 import Modal from "@/components/Modal";
 import { FetchApi } from "@/utils/FetchApi";
 import TextInput from '@/components/TextInput';
+import { useAuth } from "@/utils/functions";
 export default function HostTable() {
 
 
@@ -16,22 +17,23 @@ export default function HostTable() {
     const [itemsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
     const [actionModalOpen, setActionModalOpen] = useState(false)
-
+    const [refetch, setrefetch] = useState(0)
+const [selectedHost, setselectedHost] = useState({})
     const ref = useRef(null);
     useClickOutside(ref, () => {
         setOpen(false);
         setActionModalOpen(false)
     });
-
+    const {auth} = useAuth()
     const loadData = async () => {
-        const { data } = await FetchApi({ url: `user/getAllUser` })
-        setUsers(data?.users.users)
+        const { data } = await FetchApi({ url: `agency/hosts?agencyId=${auth._id}` })
+        setUsers(data?.hosts.filter(host => host.exchangeRequest === true))
     }
     useEffect(() => {
         loadData()
-    }, [])
+    }, [refetch])
     let searchedUsers = users?.filter((user) =>
-        user._id.includes(searchTerm)
+        user.maxId.includes(searchTerm)
     );
 
 
@@ -72,6 +74,21 @@ export default function HostTable() {
         indexOfFirstItem,
         indexOfLastItem
     );
+
+    const handleAccept = async() => {
+        await FetchApi({ url: `agency/acceptExchangeRequest?hostId=${selectedHost._id}`, method: 'post', isToast: true , callback: () => {
+            setActionModalOpen(false)
+            setrefetch(Math.random())
+        }})
+    }
+    const handleReject = async() => {
+        await FetchApi({ url: `agency/declineExchangeRequest?hostId=${selectedHost._id}`, method: 'post', isToast: true , callback: () => {
+            setActionModalOpen(false)
+            setrefetch(Math.random())
+        }})
+
+    }
+
     return (
         <div className=" overflow-hidden mx-8">
             <div className="flex flex-col md:flex-row items-center justify-between  pb-4">
@@ -96,7 +113,30 @@ export default function HostTable() {
                             >
                                 <div>
                                     <span className=" flex items-center font-medium">
-                                        Sl
+                                        Max ID
+                                        <svg
+                                            width="15"
+                                            height="10"
+                                            viewBox="0 0 9 5"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="ml-1"
+                                        >
+                                            <path
+                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
+                                                fill="#B5BFC9"
+                                            />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer "
+                                onClick={() => handleSort("hostId")}
+                            >
+                                <div>
+                                    <span className=" flex items-center font-medium">
+                                        Host ID
                                         <svg
                                             width="15"
                                             height="10"
@@ -137,6 +177,29 @@ export default function HostTable() {
                                 </div>
                             </th>
                             <th
+                                className="px-4 py-3 cursor-pointer "
+                                onClick={() => handleSort("hostType")}
+                            >
+                                <div>
+                                    <span className=" flex items-center font-medium">
+                                        Host type
+                                        <svg
+                                            width="15"
+                                            height="10"
+                                            viewBox="0 0 9 5"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="ml-1"
+                                        >
+                                            <path
+                                                d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
+                                                fill="#B5BFC9"
+                                            />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </th>
+                            <th
                                 className="px-4 py-3 cursor-pointer"
                                 onClick={() => handleSort("email")}
                             >
@@ -157,12 +220,13 @@ export default function HostTable() {
                                     </svg>
                                 </span>
                             </th>
+                            
                             <th
                                 className="px-4 py-3 cursor-pointer"
-                                onClick={() => handleSort("date")}
+                                onClick={() => handleSort("beans")}
                             >
                                 <span className=" flex items-center font-medium">
-                                    Date
+                                    Beans
                                     <svg
                                         width="15"
                                         height="10"
@@ -180,10 +244,31 @@ export default function HostTable() {
                             </th>
                             <th
                                 className="px-4 py-3 cursor-pointer"
-                                onClick={() => handleSort("beans")}
+                                onClick={() => handleSort("diamonds")}
                             >
                                 <span className=" flex items-center font-medium">
-                                    Beans
+                                    Diamonds
+                                    <svg
+                                        width="15"
+                                        height="10"
+                                        viewBox="0 0 9 5"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="ml-1"
+                                    >
+                                        <path
+                                            d="M5.14727 4.15516C4.75412 4.49564 4.17057 4.49564 3.77743 4.15516L1.14728 1.87738C0.415013 1.24323 0.863505 0.0402738 1.8322 0.0402738L7.0925 0.0402743C8.06119 0.0402744 8.50968 1.24323 7.77742 1.87739L5.14727 4.15516Z"
+                                            fill="#B5BFC9"
+                                        />
+                                    </svg>
+                                </span>
+                            </th>
+                            <th
+                                className="px-4 py-3 cursor-pointer"
+                                onClick={() => handleSort("exchangeRequestDiamonds")}
+                            >
+                                <span className=" flex items-center font-medium">
+                                    Request Diamonds
                                     <svg
                                         width="15"
                                         height="10"
@@ -213,14 +298,20 @@ export default function HostTable() {
                     <tbody>
                         {currentUsers.map((user, i) => (
                             <tr key={user._id} className="border-b whitespace-nowrap">
-                                <td className="px-4 py-4">{user._id}</td>
+                                <td className="px-4 py-4">{user.maxId}</td>
+                                <td className="px-4 py-4">{user.hostId}</td>
                                 <td onClick={() => setOpen(true)} className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
-                                    {user.firstName}
+                                    {user.firstName + ' ' + user.lastName}
                                 </td>
+                                <td className="px-4 py-4">{user.hostType}</td>
                                 <td className="px-4 py-4">{user.email}</td>
-                                <td className="px-4 py-4">{user.date}</td>
                                 <td className="px-4 py-4">{user.beans}</td>
-                                <td className="px-4 py-4 font-extrabold text-xl cursor-pointer" onClick={() => setActionModalOpen(true)}>...</td>
+                                <td className="px-4 py-4">{user.diamonds}</td>
+                                <td className="px-4 py-4">{user.exchangeRequestDiamonds}</td>
+                                <td className="px-4 py-4 font-extrabold text-xl cursor-pointer" onClick={() => {
+                                    setselectedHost(user)
+                                    setActionModalOpen(true)
+                                }}>...</td>
 
                             </tr>
                         ))}
@@ -349,53 +440,23 @@ export default function HostTable() {
                 </form>
             </Modal>
             <Modal open={actionModalOpen} >
-                <form ref={ref} className=''>
+                <div ref={ref} className=''>
                     <div className="px-7 py-9 bg-white rounded-md  max-w-[400px] w-full  border-4 border-primary">
-                        <div className="">
+                        <div className="w-[200px]">
                             <p className="text-xl font-bold text-[#5C2D95] mb-5">Host</p>
-                            <div className="relative w-full">
-                                <input
-                                    type="number"
-                                    id="coinField"
-                                    className="block font-medium focus:border-lightGray text-black px-2.5 pb-2 pt-3 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
-                                    placeholder=" "
-                                />
-                                <label
-                                    htmlhtmlFor="coinField"
-                                    className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                                >
-                                    Coin Exchange
-                                </label>
-                            </div>
-                            <div className="relative w-full mt-3">
-                                <input
-                                    type="number"
-                                    id="beanField"
-                                    className="block font-medium focus:border-lightGray text-black px-2.5 pb-2 pt-3 w-full bg-transparent rounded-lg border-1 border-gray-300 appearance-none   focus:outline-none focus:ring-0 peer"
-                                    placeholder=" "
-                                />
-                                <label
-                                    htmlhtmlFor="beanField"
-                                    className="text-sm absolute text-lightGray duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-lightGray peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                                >
-                                    Bean Exchange
-                                </label>
-                            </div>
-                            <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                Send
-                            </button>
-                            <div className="flex items-center gap-2">
-                                <button className=" bg-lightPink mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                    Block
+                            
+                            <div className="flex items-center gap-2 w-full">
+                                <button onClick={handleReject} className=" bg-error mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                    Reject
                                 </button>
-                                <button className=" bg-error mt-2 w-full py-2 rounded-lg text-white font-semibold">
-                                    Delete
+                                <button onClick={handleAccept} className=" bg-success mt-2 w-full py-2 rounded-lg text-white font-semibold">
+                                    Accept
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                </form>
+                </div>
             </Modal>
         </div >
 

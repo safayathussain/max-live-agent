@@ -11,6 +11,7 @@ import SelectInput from "../SelectInput";
 import AcceptHostModal from "../AcceptHostModal";
 import { SortIcon } from "../combinedComponents";
 import { CgEye } from "react-icons/cg";
+import toast from "react-hot-toast";
 export default function HostTable({ type }) {
 
     // confirm modal
@@ -102,12 +103,14 @@ export default function HostTable({ type }) {
     //  handle functions
     const handleSendAssets = async (e) => {
         e.preventDefault()
+        const {amount, CAmount} = e.target;
+        if(amount.value !== CAmount.value) return toast.error("Amount and the Confirmed amount don't match")
         await FetchApi({
             url: 'bean/send-beans-to-host', method: 'patch', isToast: true, data: {
                 agencyId: auth._id,
                 hostId: selectedUser.maxId,
-                amount: Number(e.target.amount.value),
-                assetType: e.target.type.value
+                amount: Number(amount.value),
+                assetType: 'beans'
             },
             callback: () => {
                 setrefetch(Math.random())
@@ -478,26 +481,10 @@ export default function HostTable({ type }) {
                                     <p className="text-xl font-bold text-[#5C2D95] mb-5">Host</p>
                                     <form onSubmit={handleSendAssets}>
                                         <div className="relative w-full mt-3">
-                                            <TextInput type="number" name={'amount'} placeholder={'Amount'} />
+                                            <TextInput type="number" name={'amount'} placeholder={'Beans Amount'} />
+                                            <TextInput type="number" name={'CAmount'} placeholder={'Confirm Beans Amount'} className={'mt-2'} />
                                         </div>
-                                        <SelectInput className={'mt-3'} placeholder={'Type'} name={'type'} options={[
-                                            {
-                                                name: 'Bean',
-                                                value: 'beans'
-                                            },
-                                            {
-                                                name: 'Coin',
-                                                value: 'coins'
-                                            },
-                                            {
-                                                name: 'Diamond',
-                                                value: 'diamonds'
-                                            },
-                                            {
-                                                name: 'Star',
-                                                value: 'stars'
-                                            },
-                                        ]} />
+                                        
                                         <button className=" bg-primary mt-2 w-full py-2 rounded-lg text-white font-semibold">
                                             Send
                                         </button>
