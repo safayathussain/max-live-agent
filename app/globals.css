@@ -9,3 +9,8 @@
 .pending-icon svg path{
     fill: #626262 !important;
 }
+
+.p-fileupload-choose > span {
+    display: none;
+}
+

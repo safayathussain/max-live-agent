@@ -32,7 +32,7 @@ export const getCountry = () => {
 export const loginUser = async (email, password, func) => {
   const res = await FetchApi({ url: '/agency/agencySignin', method: 'post', data: { email, password }, callback: func })
   console.log(res)
-  if (res.status === 200) {
+  if (res?.status === 200) {
     store.dispatch(setAuth(res?.data.user))
 
   }
