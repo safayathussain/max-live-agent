@@ -16,7 +16,7 @@ export const FetchApi = async ({
         baseURL: process.env.NEXT_PUBLIC_BASE_API, // Set a base URL for all requests
         headers: {
             'Authorization': `Bearer ${store.getState().auth?.user?.sanitizedUser?.accessToken || ''}`, // Authorization header
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
         }
     });
 

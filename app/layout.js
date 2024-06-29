@@ -1,7 +1,8 @@
 import {  Poppins } from "next/font/google";
 import "./globals.css";
 import { PrimeReactProvider } from 'primereact/api';
-import "primereact/resources/themes/lara-light-cyan/theme.css";
+
+// import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Providers from "@/components/Providers";
 import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";

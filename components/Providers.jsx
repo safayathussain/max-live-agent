@@ -11,11 +11,11 @@ const Providers = ({ children }) => {
         <div>
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                    <PrimeReactProvider>
+                    {/* <PrimeReactProvider> */}
                         {/* <ThemeProvider theme={theme}> */}
                         {children}
                         {/* </ThemeProvider> */}
-                    </PrimeReactProvider>
+                    {/* </PrimeReactProvider> */}
                 </PersistGate>
             </Provider>
         </div>

@@ -18,7 +18,6 @@ const Page = () => {
     });
   }
 
-  const [showUploadField, setShowUploadField] = useState(false);
   const formRef = useRef(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [profileData, setProfileData] = useState({
@@ -50,11 +49,13 @@ const Page = () => {
     });
   };
 
- 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(formRef.current);
-    formData.append('profilePicture', uploadedImage);
+    if(uploadedImage){
+      formData.append('profilePicture', uploadedImage);
+    }
     updateUser(formData);
   };
 
@@ -90,36 +91,48 @@ const Page = () => {
   };
 
   const handleFileSelect = (event) => {
-    const file = event.files[0];
-    setUploadedImage(file);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setProfileData({ ...profileData, profilePicture: e.target.result });
-    };
-    reader.readAsDataURL(file);
+    const file = event.files[0]; // Corrected line
+    if (file) {
+      setUploadedImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileData({ ...profileData, profilePicture: e.target.result });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit} ref={formRef}>
         <div className="bg-white py-12 w-full min-h-[calc(100vh-200px)] flex items-center justify-center rounded-lg">
-          <div className="flex justify-center px-8 py-10 sm:py-4">
-            <div className="flex flex-col items-center gap-3">
-              <p className="text-xl text-grayColor">Your Profile</p>
-              <div className="relative w-max">
-              {profileData.profilePicture ? (
-                  <img
-                    src={profileData.profilePicture}
-                    alt="Uploaded"
-                    className="rounded-full w-32 h-32 object-cover"
-                  />
-                ) : (
-                  <Image
-                    src={logo}
-                    alt="Logo"
-                    className="rounded-full w-32 h-32 object-cover"
-                  />
-                )}
+          <div className="flex justify-center px-8 py-10 sm:py-4 w-full max-w-[600px]">
+            <div className="flex flex-col items-center gap-3 w-full">
+              <p className="text-xl">Your Profile</p>
+              <div className="relative w-32 h-32">
+                <div className="relative rounded-full w-32 h-32 bg-gray-300 text-white text-2xl flex items-center justify-center overflow-hidden">
+                  {profileData.profilePicture.startsWith('uploads') ? (
+                    <Image
+                      width={1000}
+                      height={1000}
+                      src={process.env.NEXT_PUBLIC_IMAGE_URL + profileData.profilePicture.replace(/\s/g, '%20')}
+                      alt="Profile"
+                      className="object-cover w-full h-full border rounded-full border-primary"
+                    />
+                  ) : profileData.profilePicture ?
+                    <img
+                      src={profileData.profilePicture}
+                      alt="Profile"
+                      className="object-cover w-full h-full border rounded-full border-primary"
+                    />
+                    : (
+                      <span className="absolute inset-0 flex items-center font-bold text-5xl justify-center">
+                        {profileData.agencyName.charAt(0).toUpperCase()}
+                      </span>
+                    )}
+                </div>
                 <FileUpload
                   className="bg-error rounded-full flex justify-center items-center size-7 absolute right-2 top-[70%]"
                   mode="basic"
@@ -132,6 +145,7 @@ const Page = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 sm:min-w-[380px] w-full mt-4 gap-4">
                 {Object.keys(profileData).map((key) => (
+                  key !== 'profilePicture' && 
                   <div className="relative w-full" key={key}>
                     <TextInput
                       label={capitalizeAllWords(key.replace(/([A-Z])/g, ' $1').trim().replace('_', ''))}
