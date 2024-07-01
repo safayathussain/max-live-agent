@@ -1,10 +1,22 @@
+'use client'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FileUpload } from 'primereact/fileupload';
 import SettingCard from '@/components/SettingCard';
 import TextInput from '@/components/TextInput';
 const page = () => {
   
+  const [countries, setCountries] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+      const data = await response.json();
+      console.log(data);
+      setCountries(data.data);
+    };
+    fetchData();
+  }, []);
+
   const data = [
     {
       title: 'Total Video HOST',

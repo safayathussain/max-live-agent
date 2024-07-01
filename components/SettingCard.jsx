@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { FileUpload } from 'primereact/fileupload'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '@/public/logo.svg'
 import '@/app/dashboard/prime-react.css'
 import TextInput from '@/components/TextInput';
@@ -9,6 +9,7 @@ import SelectInput from './SelectInput'
 
 const SettingCard = () => {
     const [showUploadField, setShowUploadField] = useState(false)
+    const [selectedCountry, setSelectedCountry] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -18,6 +19,23 @@ const SettingCard = () => {
             country: formData.get('country'),
         })
     }
+
+    const [countries, setCountries] = useState([]);
+    useEffect(() => {
+      const fetchData = async () => {
+        const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+        const data = await response.json();
+        setCountries(data.data);
+      };
+      fetchData();
+    }, []);
+
+    const handleCountryChange = (event) => {
+        setSelectedCountry(event.target.value);
+    }
+
+    console.log(countries)
+    console.log(selectedCountry);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -38,23 +56,10 @@ const SettingCard = () => {
                     </div>
                 </div>
                 <div className="relative w-full">
-                    <TextInput label={'Agency Name'} name={'Search'} id={'idSearch'} />
+                    <TextInput label={'Agency Name'} name={'agency'} id={'idAgency'} />
                 </div>
                 <div className="relative w-full">
-                    <SelectInput options={[
-                        {
-                            name: 'Bangladesh',
-                            value: 'BD'
-                        },
-                        {
-                            name: 'India',
-                            value: 'IND'
-                        },
-                        {
-                            name: 'Pakistan',
-                            value: 'PAK'
-                        },
-                    ]} label={'Country Name'} name={'Search'} id={'idSearch'} />
+                    <SelectInput options={countries.map(country => ({ name: country.country, value: country.iso2 }))} label={'Country Name'} name={'country'} id={'idCountry'} onChange={handleCountryChange} />
                 </div>
                 <button type="submit" className='px-4 py-1 rounded-md bg-[#F5AAE9] text-base font-medium text-white w-max'>
                     Save
